@@ -335,13 +335,6 @@ button{font:inherit;color:inherit}
 </div>
 <div class="toast" id="toast"></div>
 
-<!-- 腾讯地图 GL JS：代理模式，由 WorkBuddy 运行时注入端口与密钥，地址中不包含 key -->
-<script type="text/javascript">
-  window._TMapSecurityConfig = {
-    serviceHost: 'http://127.0.0.1:__WB_HTTP_PORT__/_TMapService/_wbt/__WB_TMAP_SECRET__',
-  };
-</script>
-<script src="https://map.qq.com/api/gljs?v=1.exp&libraries=service"></script>
 <script>
 (function () {
   'use strict';
@@ -1018,7 +1011,31 @@ button{font:inherit;color:inherit}
     try { initTMap(); } catch (e) { mapFail('地图初始化失败，行程与时间线不受影响'); }
   }
 
-  /* ---------- 地图（腾讯地图 GL JS 代理模式；只放图钉，不画连线） ---------- */
+  /* ---------- 地图（腾讯地图 GL JS；只放图钉，不画连线） ----------
+     TMAP_KEY 留空时走 WorkBuddy 的代理模式（仅 WorkBuddy 托管的页面可用）；
+     部署到 GitHub Pages 等普通静态托管时，必须填自己的腾讯地图 key。 */
+  var TMAP_KEY = '';   /* ← 申请到 key 后填这里 */
+  var TMAP_PROXY = 'http://127.0.0.1:__WB_HTTP_PORT__/_TMapService/_wbt/__WB_TMAP_SECRET__';
+  var tmapLoad = 'idle';
+  function loadTMapSDK(done) {
+    if (window.TMap && TMap.Map) { done(true); return; }
+    if (tmapLoad === 'loading') {
+      var waited = 0;
+      var tick = setInterval(function () {
+        waited += 200;
+        if (window.TMap && TMap.Map) { clearInterval(tick); done(true); }
+        else if (waited > 8000) { clearInterval(tick); done(false); }
+      }, 200);
+      return;
+    }
+    if (!TMAP_KEY) window._TMapSecurityConfig = { serviceHost: TMAP_PROXY };
+    tmapLoad = 'loading';
+    var sc = document.createElement('script');
+    sc.src = 'https://map.qq.com/api/gljs?v=1.exp' + (TMAP_KEY ? '&key=' + encodeURIComponent(TMAP_KEY) : '');
+    sc.onload = function () { tmapLoad = 'ready'; done(true); };
+    sc.onerror = function () { tmapLoad = 'failed'; done(false); };
+    document.head.appendChild(sc);
+  }
   var mapInst = null, mapReady = false, mapLayers = {};
 
   function ll(lat, lng) { return new TMap.LatLng(lat, lng); }
@@ -1067,41 +1084,48 @@ button{font:inherit;color:inherit}
   function initTMap() {
     var el = document.getElementById('tmap');
     if (!el) return;
-    if (typeof TMap === 'undefined' || !TMap.Map) { mapFail('地图未加载（网络或浏览器限制），行程与时间线不受影响'); return; }
-    try { if (mapInst && mapInst.destroy) mapInst.destroy(); } catch (e) {}
-    mapInst = null; mapReady = false;
-    try {
-      mapInst = new TMap.Map(el, { center: ll(34.655, 112.52), zoom: 11, minZoom: 9, maxZoom: 18, viewMode: '2D', showControl: false });
-    } catch (e) { mapFail('地图无法显示（浏览器不支持或加载失败），行程与时间线不受影响'); return; }
-    var tilesOk = false;
-    mapInst.on('tilesloaded', function () { tilesOk = true; var l = document.getElementById('mapLoading'); if (l) l.style.display = 'none'; });
-    setTimeout(function () { if (!tilesOk) mapFail('地图暂时打不开，先看当天的地点：'); }, 5000);
-    /* 兜底：去掉缩放 / 旋转 / 比例尺控件 */
-    try {
-      var CID = TMap.constants && TMap.constants.DEFAULT_CONTROL_ID;
-      if (CID && mapInst.removeControl) {
-        ['ZOOM', 'ROTATION', 'SCALE'].forEach(function (k) { if (CID[k]) { try { mapInst.removeControl(CID[k]); } catch (e) {} } });
+    loadTMapSDK(function (ok) {
+      if (!ok) {
+        mapFail(TMAP_KEY ? '地图加载失败（key 或网络问题），先看当天的地点：'
+          : '地图需要配置腾讯地图 key 才能显示，先看当天的地点：');
+        return;
       }
-    } catch (e) {}
-    mapReady = true;
-    var ms = {};
-    ['1', '2'].forEach(function (d) {
-      ['1', '2', '3', '4'].forEach(function (n) {
-        ms['spot' + d + '_' + n] = new TMap.MarkerStyle({ width: 30, height: 30, anchor: { x: 15, y: 29 }, src: svgUri(pinSvg(d === '1' ? '#be2d1e' : '#1e7d64', n)) });
+      if (!document.getElementById('tmap')) return;
+      try { if (mapInst && mapInst.destroy) mapInst.destroy(); } catch (e) {}
+      mapInst = null; mapReady = false;
+      try {
+        mapInst = new TMap.Map(el, { center: ll(34.655, 112.52), zoom: 11, minZoom: 9, maxZoom: 18, viewMode: '2D', showControl: false });
+      } catch (e) { mapFail('地图无法显示（浏览器不支持或加载失败），行程与时间线不受影响'); return; }
+      var tilesOk = false;
+      mapInst.on('tilesloaded', function () { tilesOk = true; var l = document.getElementById('mapLoading'); if (l) l.style.display = 'none'; });
+      setTimeout(function () { if (!tilesOk) mapFail('地图暂时打不开，先看当天的地点：'); }, 5000);
+      /* 兜底：去掉缩放 / 旋转 / 比例尺控件 */
+      try {
+        var CID = TMap.constants && TMap.constants.DEFAULT_CONTROL_ID;
+        if (CID && mapInst.removeControl) {
+          ['ZOOM', 'ROTATION', 'SCALE'].forEach(function (k) { if (CID[k]) { try { mapInst.removeControl(CID[k]); } catch (e) {} } });
+        }
+      } catch (e) {}
+      mapReady = true;
+      var ms = {};
+      ['1', '2'].forEach(function (d) {
+        ['1', '2', '3', '4'].forEach(function (n) {
+          ms['spot' + d + '_' + n] = new TMap.MarkerStyle({ width: 30, height: 30, anchor: { x: 15, y: 29 }, src: svgUri(pinSvg(d === '1' ? '#be2d1e' : '#1e7d64', n)) });
+        });
       });
+      ms.station = new TMap.MarkerStyle({ width: 30, height: 30, anchor: { x: 15, y: 29 }, src: svgUri(pinSvg('#1f3c78', '站')) });
+      mapLayers.markers = new TMap.MultiMarker({ map: mapInst, styles: ms, geometries: [] });
+      mapLayers.labels = new TMap.MultiLabel({ map: mapInst, styles: {
+        lb: new TMap.LabelStyle({ color: '#221a15', size: 13, offset: { x: 0, y: -36 }, padding: '3px 7px', backgroundColor: '#ffffff', borderColor: '#b8a98f', borderWidth: 1, borderRadius: 5 })
+      }, geometries: [], collisionOptions: { sameSource: true } });
+      mapInst.on('dragend', hidePin);
+      mapInst.on('zoom', hidePin);
+      mapLayers.markers.on('click', function (e) {
+        var id = e && e.geometry && e.geometry.properties && e.geometry.properties.poi;
+        if (id) showPin(id);
+      });
+      drawDay(MAP_STATE.day, true);
     });
-    ms.station = new TMap.MarkerStyle({ width: 30, height: 30, anchor: { x: 15, y: 29 }, src: svgUri(pinSvg('#1f3c78', '站')) });
-    mapLayers.markers = new TMap.MultiMarker({ map: mapInst, styles: ms, geometries: [] });
-    mapLayers.labels = new TMap.MultiLabel({ map: mapInst, styles: {
-      lb: new TMap.LabelStyle({ color: '#221a15', size: 13, offset: { x: 0, y: -36 }, padding: '3px 7px', backgroundColor: '#ffffff', borderColor: '#b8a98f', borderWidth: 1, borderRadius: 5 })
-    }, geometries: [], collisionOptions: { sameSource: true } });
-    mapInst.on('dragend', hidePin);
-    mapInst.on('zoom', hidePin);
-    mapLayers.markers.on('click', function (e) {
-      var id = e && e.geometry && e.geometry.properties && e.geometry.properties.poi;
-      if (id) showPin(id);
-    });
-    drawDay(MAP_STATE.day, true);
   }
   function drawDay(d, fit) {
     if (!mapReady) return;
