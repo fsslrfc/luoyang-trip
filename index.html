@@ -1382,7 +1382,7 @@ button{font:inherit;color:inherit}
   function pageTicket() {
     var html = sh('去程', '北京 → 洛阳') + TICKETS.go.map(tcard).join('');
     html += sh('返程', '11/21 14:00 以后 · 按发车时间排序') + TICKETS.back.map(tcard).join('');
-    html += '<p class="note">时刻与票价为 2026-11-04 查询结果，余票和价格以 12306 当天为准；龙门站与洛阳站是两个站，K 字头夜车从洛阳站发车。<br>手机上点“去 12306 买票”会尝试唤起 12306 App；没装或跳不过去会提示“跳转失败，请手动前往 12306 购买”。12306 没有开放到具体车次的跳转，进 App 后仍需自己选车次（可先用“复制车次”拿到车次号）。</p>';
+    html += '<p class="note">时刻与票价为 2026-11-04 查询结果，余票和价格以 12306 当天为准；龙门站与洛阳站是两个站，K 字头夜车从洛阳站发车。<br>点“去 12306 买票”会尝试唤起 12306 App。**如果页面是在微信里打开的，微信会屏蔽唤起，请点右上角「···」→ 在浏览器打开**；浏览器里没装 App 或没跳成功，会提示手动购买，可用旁边的“复制车次”拿车次号。12306 没有开放到具体车次的跳转，进 App 后仍需自己选车次。</p>';
     return { title: '车票', back: '#/project', tab: 'project', html: html, after: bindTicket };
   }
   function bindTicket() {
@@ -1393,20 +1393,35 @@ button{font:inherit;color:inherit}
       b.addEventListener('click', openApp);
     });
   }
-  /* 只尝试唤起 12306 App（cn.12306://）；1.2 秒内没跳走就提示手动购买 */
+  /* 唤起 12306 App：
+     - 微信 / QQ 内置浏览器会屏蔽 URL Scheme，直接给提示（这是平台限制，绕不过）
+     - 安卓用 intent://（装了直接开，没装落应用商店），iOS 用 cn.12306://
+     - 必须顶层跳转；iframe 里的自定义 scheme 会被 Chrome/Safari 拦截 */
   function openApp() {
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/i.test(ua);
+    var android = /Android/i.test(ua);
+    if (!ios && !android) { toast('请在手机上打开本页，或手动前往 12306 购买', 2400); return; }
+    if (/MicroMessenger/i.test(ua)) {
+      toast('微信里不能唤起 App：点右上角「···」→ 在浏览器打开', 3600);
+      return;
+    }
+    if (/\sQQ\s|QQBrowser/i.test(ua)) {
+      toast('QQ 浏览器里不能唤起 App：点右上角「···」→ 在浏览器打开', 3600);
+      return;
+    }
     var left = false;
-    var timer = setTimeout(function () {
-      if (!left) toast('跳转失败，请手动前往 12306 购买', 2000);
-    }, 1200);
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) { left = true; clearTimeout(timer); }
+      if (document.hidden) left = true;
     }, { once: true });
-    var f = document.createElement('iframe');
-    f.style.display = 'none';
-    f.src = 'cn.12306://';
-    document.body.appendChild(f);
-    setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 2000);
+    setTimeout(function () {
+      if (!left) toast('没跳成功：请手动打开 12306 App，右侧可复制车次', 2600);
+    }, 1500);
+    if (android) {
+      location.href = 'intent://#Intent;package=com.MobileTicket;scheme=cn.12306;end';
+    } else {
+      location.href = 'cn.12306://';
+    }
   }
 
   /* ---------- 二级：费用 ---------- */
