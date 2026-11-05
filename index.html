@@ -325,6 +325,8 @@ button{font:inherit;color:inherit}
 .roomrow:last-child{border-bottom:0}
 .roomrow span{color:var(--muted)}
 .catbar{margin:6px 0 4px}
+.dt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.dt-head .dt-nav{margin-top:4px;flex:none;padding:6px 14px;font-size:13px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:11px}
 .pcard-main{display:block;color:inherit;text-decoration:none}
 .pcard-img{height:132px;overflow:hidden;background:#e8dfd0}
@@ -603,7 +605,7 @@ button{font:inherit;color:inherit}
   /* ---------- 两天行程 ---------- */
   var DAYS = [
     {
-      name: '石窟 · 古墓 · 古城', date: '11/20 周五',
+      name: '古墓博物馆 · 白马寺 · 洛邑古城', date: '11/20 周五',
       summary: ['07:00 乘 G321 从北京西出发', '10:00 到龙门站，11:00 古墓博物馆', '13:00 午饭（宴天下），14:30 入住亚朵', '15:30 白马寺，18:30 水席，19:45 洛邑古城'],
       flow: [['北京西站', 0], ['龙门站', 1], ['古墓博物馆', 2], ['午饭（宴天下）', 4], ['亚朵入住', 6], ['白马寺', 8], ['水席（宝元）', 11], ['洛邑古城', 12]],
       items: [
@@ -624,7 +626,7 @@ button{font:inherit;color:inherit}
       ]
     },
     {
-      name: '石窟 · 自由 · 返京', date: '11/21 周六',
+      name: '龙门石窟 · 自由活动 · 返程', date: '11/21 周六',
       summary: ['07:30 退房，08:30 龙门石窟（讲解）', '11:30 午饭（武哥跑马汤）', '12:30–16:00 自由活动（可选景点）', '16:45 龙门站，17:36 G362 返京'],
       flow: [['亚朵退房', 0], ['龙门石窟（讲解）', 2], ['武哥跑马汤', 4], ['自由活动', 5], ['龙门站', 7], ['G362 返京', 8]],
       items: [
@@ -791,18 +793,25 @@ button{font:inherit;color:inherit}
     if (!m || m.getAttribute('data-bound')) return;
     m.setAttribute('data-bound', '1');
     m.addEventListener('click', function (e) {
-      if (e.target === m) closeSheet();
-      if (e.target && e.target.id === 'shClose') closeSheet();
+      if (e.target === m || (e.target && e.target.id === 'shClose')) closeSheet();
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+    /* 全局委托：页面里任何 [data-nav] / [data-room] 都能唤起弹窗 */
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var n = t.closest('[data-nav]');
+      if (n) { navSheet(n.getAttribute('data-nav')); return; }
+      if (t.closest('[data-room]')) roomSheet();
+    });
   }
   function navSheet(id) {
     var P = placeOf(id), u = navUrls(id);
     if (!P || !u) return;
     var body =
-      '<a class="navopt" target="_blank" rel="noopener" href="' + u.amap + '"><i>高</i>在高德地图打开<small>驾车导航</small></a>' +
-      '<a class="navopt" target="_blank" rel="noopener" href="' + u.baidu + '"><i>百</i>在百度地图打开<small>驾车导航</small></a>' +
-      '<a class="navopt" target="_blank" rel="noopener" href="' + u.qq + '"><i>腾</i>在腾讯地图打开<small>驾车导航</small></a>' +
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.amap + '"><i>高</i>在高德地图打开<small>导航</small></a>' +
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.baidu + '"><i>百</i>在百度地图打开<small>导航</small></a>' +
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.qq + '"><i>腾</i>在腾讯地图打开<small>导航</small></a>' +
       '<button type="button" class="navopt" data-copy="' + esc(P.name) + '" data-msg="已复制：' + esc(P.name) + '"><i>复</i>复制目的地名称<small>' + esc(P.name) + '</small></button>' +
       '<p class="sh-note">微信里打不开是平台限制，点右上角「···」→ 在浏览器打开；高德/百度/腾讯已装 App 会自动唤起。</p>';
     openSheet(P.name, body);
@@ -814,21 +823,13 @@ button{font:inherit;color:inherit}
   }
   function roomSheet() {
     var rows = [
-      ['总人数', '17 人（14 男 / 3 女）'],
-      ['房型需求', '8 双床 + 1 单人（9 间）'],
-      ['女生安排', '3 人可接受三人间，或 1 双床 + 1 单人'],
-      ['入住/退房', '11/20 14:30 起 · 11/21 07:30 退房'],
-      ['早餐', '¥48/人 · 工作日 07:00–10:30']
+      ['总人数', '17 人'],
+      ['最早入住', '11/20 14:00'],
+      ['最晚退房', '11/21 14:00'],
+      ['早餐', '含早餐']
     ];
-    var body = rows.map(function (r) { return '<div class="roomrow"><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></div>'; }).join('') +
-      '<p class="sh-note">具体分房名单待补，确定后直接替换这里。</p>' +
-      '<button type="button" class="navopt" style="margin-top:10px" data-copy="17 人：8 双床 + 1 单人（9 间）" data-msg="已复制房间需求"><i>复</i>复制房间需求<small>发给酒店</small></button>';
+    var body = rows.map(function (r) { return '<div class="roomrow"><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></div>'; }).join('');
     openSheet('房间分组', body);
-    $$('#shBody [data-copy]').forEach(function (b) {
-      b.addEventListener('click', function () {
-        copyText(b.getAttribute('data-copy'), b.getAttribute('data-msg') || '已复制');
-      });
-    });
   }
 
   /* ---------- 工具函数 ---------- */
@@ -974,7 +975,7 @@ button{font:inherit;color:inherit}
         html += '<div class="tl-day"><b>第 ' + x.d + ' 天</b>' + (x.d === 1 ? '11/20 周五' : '11/21 周六') + '</div>';
       }
       var done = x.e < now, cur = x.s <= now && now <= x.e;
-      html += evHTML(x.item, x.d, cur ? 'now' : (done ? 'done' : ''), false);
+      html += evHTML(x.item, x.d, cur ? 'now' : (done ? 'done' : ''));
     });
     return html + '</div>';
   }
@@ -988,7 +989,7 @@ button{font:inherit;color:inherit}
       '</div></section>';
     html += '<div id="cdBox">' + countdownInner() + '</div>';
     html += '<div class="glance">' +
-      gcell('人数', '17 人', '含领队') +
+      gcell('人数', '17 人', '14 男 3 女') +
       gcell('行程', '2 天 1 晚', '11/20 – 11/21') +
       '</div>';
     html += sh('近期事件', '节选自行程');
@@ -1145,16 +1146,6 @@ button{font:inherit;color:inherit}
   }
   function bindItinerary(dayN) {
     bindSheet();
-    var tl = document.getElementById('tl');
-    if (tl) {
-      tl.addEventListener('click', function (e) {
-        var t = e.target;
-        if (!t || !t.getAttribute) return;
-        var nid = t.getAttribute('data-nav');
-        if (nid) { navSheet(nid); return; }
-        if (t.getAttribute('data-room')) roomSheet();
-      });
-    }
     MAP_STATE.day = dayN;
     markDayState(dayN);
     clearInterval(progTimer);
@@ -1423,13 +1414,6 @@ button{font:inherit;color:inherit}
         document.getElementById('placeList').innerHTML = placeListHTML(a.getAttribute('data-cat'));
       });
     });
-    document.getElementById('placeList').addEventListener('click', function (e) {
-      var t = e.target;
-      if (!t || !t.getAttribute) return;
-      var nid = t.getAttribute('data-nav');
-      if (nid) { navSheet(nid); return; }
-      if (t.getAttribute('data-room')) roomSheet();
-    });
   }
 
   /* ---------- 三级：景点详情 ---------- */
@@ -1438,15 +1422,14 @@ button{font:inherit;color:inherit}
     if (!S) return { title: '未找到', back: '#/spots', tab: 'spots', html: '<p class="lead">这个景点不存在。</p>' };
     var html = '<div class="dt-hero"><img src="' + IMG[S.img] + '" alt="' + esc(S.name) + '">' +
       '<div class="dt-hero-tags"><span class="sc-day">' + esc(S.when) + '</span>' + (S.must ? tg('r', '必去') : tg('k', '可选')) + '</div></div>';
-    html += '<div class="dt-body"><h1 class="dt-title">' + esc(S.name) + '</h1><p class="dt-price">' + esc(S.price) + '</p>';
+    html += '<div class="dt-body"><div class="dt-head"><div><h1 class="dt-title">' + esc(S.name) + '</h1><p class="dt-price">' + esc(S.price) + '</p></div>' +
+      '<button type="button" class="ev-act p dt-nav" data-nav="' + id + '">导航</button></div>';
     html += '<p class="lead">' + esc(S.intro) + '</p>';
     html += box('基本信息', dl(S.facts));
     html += box('购票与预约', ol(S.booking));
     if (S.tips && S.tips.length) html += box('注意', ul(S.tips));
-    html += '<div class="row2">' +
-      (mapDayOf(id) ? '<a class="btn ghost" href="#/itinerary/d' + mapDayOf(id) + '">在行程地图里看</a>' : '<a class="btn ghost" href="#/spots">返回景点</a>') +
-      '<a class="btn" target="_blank" rel="noopener" href="' + amap(S.nav) + '">导航（高德搜索）</a></div></div>';
-    return { title: S.short, back: '#/spots', tab: 'spots', html: html };
+    html += '</div>';
+    return { title: S.short, back: '#/spots', tab: 'spots', html: html, after: bindSheet };
   }
 
   /* ---------- 二级：吃住行 ---------- */
@@ -1555,7 +1538,6 @@ button{font:inherit;color:inherit}
     html += '<div class="proj">' +
       '<a class="pj" href="#/project/ticket"><i>票</i><div><b>车票</b><span>去程：19 晚卧铺 / 20 早 G321；返程：21 下午 8 趟</span></div><span class="go">›</span></a>' +
       '<div class="pj off"><i>约</i><div><b>预约</b><span>景点实名预约（待做）</span></div></div>' +
-      '<div class="pj off"><i>车</i><div><b>打车</b><span>高德 / 滴滴（待做）</span></div></div>' +
       '</div>';
     html += box('关于跳转', ul([
       '车票：直接打开 12306 的查票页面，起终点和日期已经填好，选车次下单即可',
