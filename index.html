@@ -890,13 +890,15 @@ img{cursor:zoom-in}
     v.hidden = false;
     document.body.style.overflow = 'hidden';
     vwApply();
+    try { history.pushState({ vw: 1 }, ''); } catch (e) {}
   }
-  function closeViewer() {
+  function closeViewer(fromPop) {
     var v = document.getElementById('viewer');
     if (!v || v.hidden) return;
     v.hidden = true;
     document.body.style.overflow = '';
     setTimeout(function () { var i = vwImg(); if (i && v.hidden) i.src = ''; }, 120);
+    if (!fromPop && history.state && history.state.vw) { try { history.back(); } catch (e) {} }
   }
   function bindViewer() {
     var v = document.getElementById('viewer');
@@ -980,6 +982,10 @@ img{cursor:zoom-in}
     }, { passive: false });
 
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeViewer(); });
+    window.addEventListener('popstate', function () {
+      var vv = document.getElementById('viewer');
+      if (vv && !vv.hidden) closeViewer(true);
+    });
     if (i) i.addEventListener('dragstart', function (e) { e.preventDefault(); });
   }
 
