@@ -145,7 +145,7 @@ button{font:inherit;color:inherit}
 .notes p{font-size:12.5px;color:var(--ink2);line-height:1.7;background:#f5efe4;border-radius:10px;padding:9px 12px;margin-top:8px}
 
 /* 地图（腾讯地图 GL JS）：容器必须有固定高度 */
-.mapbox{position:relative;width:100%;height:300px;margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);background:#f1ebe0}
+.mapbox{position:relative;isolation:isolate;width:100%;height:300px;margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--sh);background:#f1ebe0}
 .tmap{position:absolute;inset:0;width:100%;height:100%}
 .maploading{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--muted);background:#f1ebe0;z-index:2}
 .mapfb{padding:14px 16px;font-size:12.5px;color:var(--ink2);line-height:1.6}
@@ -328,7 +328,7 @@ button{font:inherit;color:inherit}
 .roomrow:last-child{border-bottom:0}
 .roomrow span{color:var(--muted)}
 .roomrow em{font-style:normal;font-weight:700;color:var(--ink)}
-.segs-sticky{position:sticky;top:50px;z-index:20;background:var(--paper);padding:8px 0 9px;box-shadow:0 8px 12px -10px rgba(60,40,20,.5)}
+.segs-sticky{position:sticky;top:50px;z-index:60;background:var(--paper);padding:8px 0 9px;box-shadow:0 8px 12px -10px rgba(60,40,20,.5)}
 .seg.catbar{box-shadow:0 2px 7px rgba(60,40,20,.10)}
 #placeList{margin-top:4px}
 .sec-div{border-top:2px solid #7d6247;margin:52px 0 36px}
