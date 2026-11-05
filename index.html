@@ -257,6 +257,9 @@ button{font:inherit;color:inherit}
 .bul{list-style:none;display:grid;gap:6px}
 .bul li{font-size:13px;color:var(--ink2);line-height:1.65;padding-left:14px;position:relative}
 .bul li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.bul li strong{font-weight:700;color:var(--ink)}
+.bul li.key{background:#fdf2df;border-left:3px solid var(--red);border-radius:7px;padding:8px 10px;color:var(--ink)}
+.bul li.key::before{display:none}
 .steps{margin-left:18px;display:grid;gap:6px;font-size:13px;color:var(--ink2);line-height:1.65}
 .warnbox{margin-top:12px;background:#fbeae7;border-left:3px solid var(--red);border-radius:0 10px 10px 0;padding:10px 12px;font-size:12.5px;color:#6b2019;line-height:1.65}
 .alt-i{padding:8px 0;border-top:1px dashed var(--line2)}
@@ -492,13 +495,14 @@ button{font:inherit;color:inherit}
       summary: '东汉创建，中国第一古刹，寺内还有泰国、缅甸、印度佛殿',
       intro: '始建于东汉永平十一年（公元 68 年），是佛教传入中国后由官方兴建的第一座寺院，被尊为“释源”“祖庭”。中轴线是近两千年的中式古刹，西侧一墙之隔是泰国、缅甸、印度捐建的佛殿群，一个院子里能看四种风格。',
       facts: [
-        ['开馆时间', '7:40（18:00 停止入园）· 旺季 4/1–11/30'],
-        ['闭馆时间', '18:30（18:40 清场）；齐云塔院 18:00 先关'],
-        ['门票', '35 元；学生、教师凭证 17.5 元；60 岁以上免票'],
+        ['开馆时间', '8:00（17:00 停止入园）'],
+        ['闭馆时间', '17:30；齐云塔院 17:00 闭园'],
+        ['门票', '35 元，含白马寺、齐云塔院、国际佛殿区，当天单次有效'],
         ['需要预约', '是，可提前 7 天（含当天）'],
         ['地址', '洛阳市瀍河回族区洛白路 6 号'],
         ['到达', '导航「白马寺南 2 门」，离检票口最近'],
-        ['推荐时长', '2.5–3 小时；我们只排了 1 小时 15 分，抓重点看']
+        ['推荐时长', '2.5–3 小时；我们只排了 1 小时 15 分，抓重点看'],
+        ['咨询电话', '0379-63789090']
       ],
       booking: [
         '预约方式：只有微信公众号「洛阳白马寺」能约，没有现场散票',
@@ -506,20 +510,21 @@ button{font:inherit;color:inherit}
         '入场方式：刷身份证或预约码入园'
       ],
       tips: [
-        '大佛殿、接引殿 2026 年 8 月起修缮封闭，先跳过',
-        '8:30–17:00 网约车不能开到南门，只能停在 P2 释源广场，到检票口约 900 米；我们 15:30 到正好撞上限行，建议直接坐摆渡车（单程 5 元）',
-        '进门右手钟楼旁可免费领 3 支香，别买门口的高价香',
-        '殿内不能拍佛像；缅甸殿要脱鞋，穿双袜子',
-        '齐云塔院在寺外东南约 200 米，18:00 关门，要比主景区先安排'
+        '**大佛殿正在封闭修缮：8 月 14 日公告，工期约 120 天，11/20 去基本还没修好，殿内看不到，只能从围挡外经过**',
+        '**8:30–17:00 网约车开不到南门，只能停在 P2 释源广场，离检票口约 900 米；我们 15:30 到正好撞上限行，建议直接坐摆渡车（单程 5 元）**',
+        '齐云塔院 17:00 闭园，比主景区早半小时，先去塔院再逛主寺更稳',
+        '钟楼旁可免费领 3 支香；别带长于 50cm 或直径大于 1cm 的高香、黄裱纸和荤腥食品入内',
+        '寺内禁止吸烟、禁带宠物；不要对着佛像拍照，也不要用无人机',
+        '着装要朴素：男士不穿背心短裤拖鞋，女士裙装过膝、不露肩背'
       ],
       route: [
         ['山门与石马', '门口那对石马是宋代老物件，原本在魏孝文帝陵前。进门低头看脚下，有块莲花石雕，四角雕蝴蝶，叫“步步生莲”'],
-        ['大雄殿', '全寺最值钱的东西在这儿：23 尊元代「夹纻干漆」造像，用漆和麻布一层层糊成，工艺已失传。殿内禁止拍照'],
+        ['大雄殿', '全寺最值钱的东西在这儿：23 尊元代「夹纻干漆」造像，用漆和麻布一层层糊成，工艺已失传。殿内禁止拍照。注意前面的大佛殿正在修缮，这一段只能绕行'],
         ['清凉台', '寺里最高的地方，汉明帝曾在此避暑读书；摄摩腾、竺法兰在这里译出中国第一部汉译佛经《四十二章经》。红墙配竹子是全寺最好看的角落'],
         ['国际佛殿苑', '泰国金殿、缅甸白塔、印度 1:1 复刻的桑奇大塔，最出片的一段。印度殿的砂岩是运来再组装的，为印度政府在海外捐建的第一座佛殿'],
-        ['齐云塔院', '寺外东南 200 米，同一张票。金代 13 层方形密檐砖塔，高约 25 米，河南唯一的比丘尼道场。塔南二十来米处拍手，回声像蛙叫，可以试']
+        ['齐云塔院', '寺外东南 200 米，同一张票，17:00 闭园。金代 13 层方形密檐砖塔，高约 25 米，河南唯一的比丘尼道场。塔南二十来米处拍手，回声像蛙叫，可以试']
       ],
-      mapNote: '景区没有官方电子地图，南门检票口有纸质导览图可领。动线：南门检票 → 山门石马 → 天王殿 → 大雄殿 → 清凉台 → 国际佛殿苑 → 西门出 → 狄仁杰墓 → 齐云塔院（在寺外，别漏）。'
+      mapNote: '景区没有官方电子地图，南门检票口有纸质导览图可领。动线：南门检票 → 山门石马 → 天王殿 →（大佛殿修缮，绕行）→ 大雄殿 → 清凉台 → 国际佛殿苑 → 西门出 → 狄仁杰墓 → 齐云塔院（在寺外，别漏）。'
     },
     yingtian: {
       name: '隋唐洛阳城·应天门', short: '应天门', when: '第 2 天 · 下午（可选）', price: '60 元', must: false, img: 'yingtian', nav: '隋唐洛阳城应天门',
@@ -896,7 +901,15 @@ button{font:inherit;color:inherit}
       return '<div><dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd></div>';
     }).join('') + '</dl>';
   }
+  function richText(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); }
   function ol(items) { return '<ol class="steps">' + items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>'; }
+  function olB(items) { return '<ol class="steps">' + items.map(function (x) { return '<li>' + richText(x) + '</li>'; }).join('') + '</ol>'; }
+  function ulB(items) {
+    return '<ul class="bul">' + items.map(function (x) {
+      var key = String(x).indexOf('**') > -1;
+      return '<li' + (key ? ' class="key"' : '') + '>' + richText(x) + '</li>';
+    }).join('') + '</ul>';
+  }
   function ul(items) { return '<ul class="bul">' + items.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; }
   function amap(keyword) {
     return 'https://uri.amap.com/search?keyword=' + encodeURIComponent(keyword) + '&city=' + encodeURIComponent('洛阳') + '&src=luoyang-trip';
@@ -1465,8 +1478,8 @@ button{font:inherit;color:inherit}
       '<button type="button" class="ev-act p dt-nav" data-nav="' + id + '">导航</button></div>';
     html += '<p class="lead">' + esc(S.intro) + '</p>';
     html += box('基本信息', dl(S.facts));
-    html += box('购票与预约', ol(S.booking));
-    if (S.tips && S.tips.length) html += box('备注', ul(S.tips));
+    html += box('购票与预约', olB(S.booking));
+    if (S.tips && S.tips.length) html += box('备注', ulB(S.tips));
     if (S.route && S.route.length) {
       html += box('推荐游玩', '<ol class="rt">' + S.route.map(function (r) {
         return '<li><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></li>';
