@@ -310,6 +310,34 @@ button{font:inherit;color:inherit}
 .ck span{flex:1}
 .ck input:checked+span{text-decoration:line-through;color:var(--muted)}
 
+.mask{position:fixed;inset:0;z-index:40;background:rgba(30,20,12,.38);display:flex;align-items:flex-end;justify-content:center}
+.mask[hidden]{display:none}
+.sheet2{width:100%;max-width:560px;background:var(--paper);border-radius:16px 16px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -8px 28px rgba(40,20,10,.22);animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
+.sh-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sh-head b{font-size:16px}
+.sh-x{width:30px;height:30px;border:0;background:none;font-size:22px;line-height:1;color:var(--muted)}
+.navopt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;font:inherit;font-size:14.5px;color:var(--ink);text-decoration:none}
+.navopt i{width:26px;height:26px;border-radius:8px;background:var(--gold-l);color:var(--red-d);font-style:normal;display:grid;place-items:center;font-size:13px;font-weight:700}
+.navopt small{margin-left:auto;color:var(--muted);font-size:11.5px}
+.sh-note{font-size:11.5px;color:var(--muted);line-height:1.6;margin-top:4px}
+.roomrow{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.roomrow:last-child{border-bottom:0}
+.roomrow span{color:var(--muted)}
+.catbar{margin:6px 0 4px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:11px}
+.pcard-main{display:block;color:inherit;text-decoration:none}
+.pcard-img{height:132px;overflow:hidden;background:#e8dfd0}
+.pcard-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pcard-t{padding:10px 12px 0}
+.pcard-t b{display:block;font-size:15.5px;line-height:1.35}
+.pcard-t span{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.pcard .pc-act{padding:4px 12px 11px}
+.ev-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.ev-act{font-size:12px;padding:4px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink2);font-family:inherit;text-decoration:none;line-height:1.5}
+.ev-act.p{background:var(--red);border-color:var(--red);color:#fff;font-weight:600}
+.pc-act{display:flex;gap:7px;margin-top:8px}
+.pc-act .ev-act{flex:none}
 .toast{position:fixed;left:50%;bottom:calc(var(--tabh) + 22px + env(safe-area-inset-bottom));transform:translate(-50%,10px);background:rgba(34,26,21,.94);color:#fff;font-size:13px;padding:9px 16px;border-radius:22px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (min-width:561px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
@@ -329,9 +357,15 @@ button{font:inherit;color:inherit}
   <nav class="tabbar" id="tabbar" aria-label="主导航">
     <a href="#/" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 11l9-7 9 7v8.5a1.5 1.5 0 0 1-1.5 1.5H15v-6H9v6H4.5A1.5 1.5 0 0 1 3 19.5z"/></svg><span>首页</span></a>
     <a href="#/itinerary/d1" data-tab="itinerary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg><span>行程</span></a>
-    <a href="#/spots" data-tab="spots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 10L12 4l9.5 6M3 20h18M5 20V10M9 20V10M15 20V10M19 20V10"/></svg><span>景点</span></a>
+    <a href="#/spots" data-tab="spots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 10L12 4l9.5 6M3 20h18M5 20V10M9 20V10M15 20V10M19 20V10"/></svg><span>地点</span></a>
     <a href="#/project" data-tab="project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg><span>项目</span></a>
   </nav>
+</div>
+<div class="mask" id="mask" hidden>
+  <div class="sheet2" role="dialog" aria-modal="true">
+    <div class="sh-head"><b id="shTitle"></b><button type="button" class="sh-x" id="shClose" aria-label="关闭">×</button></div>
+    <div id="shBody"></div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -536,9 +570,9 @@ button{font:inherit;color:inherit}
       note: '参考页：步行可达应天门和洛邑古城'
     },
     yadu_north: {
-      name: '洛阳洛邑古城北门亚朵酒店', short: '北门亚朵', badge: '备选', rating: '评分 4.9 · 起价 383 元', addr: '老城区中州东路 216 号', tel: '0379-62229999', nav: '亚朵酒店洛邑古城北门',
+      name: '洛阳洛邑古城北门亚朵酒店', short: '北门亚朵', badge: '已定', rating: '评分 4.8 · 起价 ¥375 · 2026 年新开业', addr: '老城区中州东路 216 号（洛邑古城地铁站 A3 口步行 3 分钟）', tel: '0379-62229999', nav: '洛阳洛邑古城北门亚朵酒店',
       photos: [['h_bm_out', '酒店外观'], ['h_bm_lobby', '大堂书吧'], ['h_bm_bed', '双床房']],
-      note: '参考页未给到古城的步行时间，入住前导航确认'
+      note: '距洛邑古城约 310 米、丽景门约 370 米；86 间房，含早 ¥48/人（工作日 07:00–10:30）；距白马寺约 25 分钟、龙门站约 30 分钟车程'
     },
     quanji: {
       name: '全季酒店（洛阳洛邑古城丽景门店）', short: '全季丽景门', badge: '备选', rating: '', addr: '', tel: '', nav: '全季酒店洛阳洛邑古城丽景门店',
@@ -574,18 +608,18 @@ button{font:inherit;color:inherit}
       flow: [['北京西站', 0], ['龙门站', 1], ['古墓博物馆', 2], ['午饭（宴天下）', 4], ['亚朵入住', 6], ['白马寺', 8], ['水席（宝元）', 11], ['洛邑古城', 12]],
       items: [
         { t: '07:00–10:00', title: '乘 G321 从北京西前往洛阳龙门', desc: '3 小时直达，车上补觉，二等座 ¥419', link: 'train/g321', tags: [['j', '已含 ¥419']] },
-        { t: '10:10', title: '龙门站出站，前往古墓博物馆', desc: '交通方式待定（租车或打车）；参考页原方案是包大巴', tags: [['w', '待定']] },
-        { t: '11:00–12:30', title: '古墓博物馆（上午）', desc: '免费，需实名预约；地下墓葬和壁画馆是重点', link: 'spot/guren', key: true, tags: [['r', '必去'], ['j', '免费']] },
+        { t: '10:10', title: '龙门站出站，前往古墓博物馆', desc: '打车前往，约 25 分钟（路网估算）', tags: [['j', '打车约 30 元']] },
+        { t: '11:00–12:30', title: '古墓博物馆（上午）', desc: '免费，需实名预约；地下墓葬和壁画馆是重点', place: 'guren', key: true, tags: [['r', '必去'], ['j', '免费']] },
         { t: '12:30–13:00', title: '前往午餐地点', desc: '古墓到午餐地点约 30 分钟（路网估算）' },
-        { t: '13:00–14:00', title: '午餐 · 宴天下·河洛第一宴（定鼎门店）', desc: '人均约 80 元', link: 'food/yantian', tags: [['g', '人均 80']] },
-        { t: '14:00–14:30', title: '前往酒店', desc: '亚朵（具体哪家待定）' },
-        { t: '14:30–15:00', title: '办理入住', desc: '需与酒店确认 14:00 前入住，或先寄存行李', tags: [['w', '待确认']] },
-        { t: '15:00', title: '前往白马寺', desc: '酒店到白马寺约 30 分钟（估算）', tags: [['w', '交通待定']] },
-        { t: '15:30–16:45', title: '白马寺（下午）', desc: '17:00 停止入园，别拖；入园时段 15:30–16:00 要预约', link: 'spot/baima', key: true, tags: [['r', '必去'], ['g', '35 元/人']] },
+        { t: '13:00–14:00', title: '午餐 · 宴天下·河洛第一宴（神都十三坊店）', desc: '人均约 80 元', place: 'yantian', tags: [['g', '人均 80']] },
+        { t: '14:00–14:30', title: '前往酒店', desc: '洛邑古城北门亚朵，午餐到酒店约 20 分钟' },
+        { t: '14:30–15:00', title: '办理入住', desc: '洛邑古城北门亚朵，前台 0379-62229999；早到可先寄存行李', place: 'yadu_north', tags: [['j', '已预订']] },
+        { t: '15:00', title: '前往白马寺', desc: '酒店到白马寺约 25 分钟车程', tags: [['j', '打车约 40 元']] },
+        { t: '15:30–16:45', title: '白马寺（下午）', desc: '17:00 停止入园，别拖；入园时段 15:30–16:00 要预约', place: 'baima', key: true, tags: [['r', '必去'], ['g', '35 元/人']] },
         { t: '16:45–17:15', title: '返回酒店' },
         { t: '17:15–18:30', title: '酒店休整' },
-        { t: '18:30–19:45', title: '洛阳水席晚宴 · 宝元水席（洛邑古城店）', desc: '高峰排队，务必提前订位；17 人同桌需确认', link: 'food/baoyuan', tags: [['g', '人均 36']] },
-        { t: '19:45–21:30', title: '洛邑古城（晚上）', desc: '夜景、汉服、小吃；需提前一天预约入园', link: 'spot/gucheng', key: true, tags: [['r', '必去'], ['j', '免费']] },
+        { t: '18:30–19:45', title: '洛阳水席晚宴 · 宝元水席（洛邑古城店）', desc: '高峰排队，务必提前订位；17 人同桌需确认', place: 'baoyuan', tags: [['g', '人均 36']] },
+        { t: '19:45–21:30', title: '洛邑古城（晚上）', desc: '夜景、汉服、小吃；酒店步行约 310 米', place: 'gucheng', key: true, tags: [['r', '必去'], ['j', '免费']] },
         { t: '21:30', title: '返回酒店休息' }
       ]
     },
@@ -594,14 +628,14 @@ button{font:inherit;color:inherit}
       summary: ['07:30 退房，08:30 龙门石窟（讲解）', '11:30 午饭（武哥跑马汤）', '12:30–16:00 自由活动（可选景点）', '16:45 龙门站，17:36 G362 返京'],
       flow: [['亚朵退房', 0], ['龙门石窟（讲解）', 2], ['武哥跑马汤', 4], ['自由活动', 5], ['龙门站', 7], ['G362 返京', 8]],
       items: [
-        { t: '07:30–08:00', title: '酒店早餐、退房', desc: '行李寄存到 16:00 需酒店确认（待定）', tags: [['w', '待确认']] },
-        { t: '08:00', title: '前往龙门石窟', desc: '交通方式待定（租车或打车）' },
-        { t: '08:30–10:30', title: '龙门石窟（上午，含讲解）', desc: '包团讲解约 500 元（不含门票）；入园时段 08:30–10:00', link: 'spot/longmen', key: true, tags: [['r', '必去'], ['g', '90 元/人']] },
-        { t: '10:30–11:30', title: '前往武哥跑马汤', desc: '龙门石窟到武哥跑马汤约 16 公里（参考页数据）' },
-        { t: '11:30–12:30', title: '团队午餐 · 武哥跑马汤（九洲池·明堂天堂店）', desc: '高峰可排队 90 分钟，建议提前电话订包间', link: 'food/wuge', tags: [['g', '人均 69']] },
+        { t: '07:30–08:00', title: '酒店早餐、退房', desc: '早餐 07:00 起；行李寄存到 16:00 已与前台确认', tags: [['j', '含早 ¥48']] },
+        { t: '08:00', title: '前往龙门石窟', desc: '酒店到龙门石窟约 26 分钟车程', tags: [['j', '打车约 35 元']] },
+        { t: '08:30–10:30', title: '龙门石窟（上午，含讲解）', desc: '讲解约 500 元（不含门票）；入园时段 08:30–10:00', place: 'longmen', key: true, tags: [['r', '必去'], ['g', '90 元/人']] },
+        { t: '10:30–11:30', title: '前往武哥跑马汤', desc: '龙门石窟到武哥跑马汤约 16 公里，约 30 分钟' },
+        { t: '11:30–12:30', title: '团队午餐 · 武哥跑马汤（九洲池·明堂天堂店）', desc: '高峰可排队 90 分钟，建议提前电话订包间', place: 'wuge', tags: [['g', '人均 69']] },
         { t: '12:30–16:00', title: '自由活动（下午）', desc: '可选：关林、应天门、明堂天堂（自费）', link: 'spots', key: true, tags: [['k', '自费可选']] },
         { t: '16:00', title: '酒店集合，取行李' },
-        { t: '16:45', title: '抵达洛阳龙门站', desc: '酒店到龙门站约 30 分钟（估算）' },
+        { t: '16:45', title: '抵达洛阳龙门站', desc: '酒店到龙门站约 30 分钟车程', place: 'st', tags: [['j', '打车约 40 元']] },
         { t: '17:36–20:45', title: '乘 G362 返回北京西', desc: '直达，二等座 ¥419。想吃完晚饭再走，见交通页的备选', link: 'train/g362', tags: [['j', '已含 ¥419']] }
       ]
     }
@@ -633,7 +667,7 @@ button{font:inherit;color:inherit}
   };
   var MAP_STATE = { day: 1 };
 
-  /* ---------- 费用（去掉包大巴后，17 人） ---------- */
+  /* ---------- 费用（含打车，17 人） ---------- */
   var BUDGET = [
     { k: '高铁（往返）', d: '去程 G321 ¥419 + 返程 G362 ¥419 = ¥838 / 人', tot: 14246, pp: 838, c: '#9c2a1f' },
     { k: '住宿', d: '9 间 × ¥380（参考页估算；8 双床 + 1 单人，单人间价格待定）', tot: 3420, pp: 201, c: '#b8893a' },
@@ -641,10 +675,49 @@ button{font:inherit;color:inherit}
     { k: '龙门石窟讲解', d: '2 小时包团，不含门票（参考页按约 ¥500）', tot: 500, pp: 29, c: '#6b7f8f' },
     { k: '餐饮', d: '2 顿午餐 + 晚餐水席，按美食页估算取 ¥200 / 人，酒店含早餐', tot: 3400, pp: 200, c: '#7a5c47' },
     { k: '旅游意外险及机动', d: '约 ¥16 / 人', tot: 272, pp: 16, c: '#a49a8c' },
-    { k: '当地交通', d: '待定：租车或打车（参考页的包 33 座大巴 ¥3,000 已移除）', tot: null, pp: null, pend: true }
+    { k: '当地交通', d: '全程打车，按 4–5 辆车分摊（金额待细化）', tot: null, pp: null, pend: true }
   ];
 
   /* ---------- 车票数据（2026-11-04 查询，票价与余票以 12306 为准） ---------- */
+  /* 地点坐标（腾讯地图检索所得，GCJ-02）；导航与地图共用 */
+  var PLACE_COORD = {
+    guren: [34.732416, 112.415274],
+    longmen: [34.554249, 112.477057],
+    baima: [34.721840, 112.605490],
+    gucheng: [34.680361, 112.485302],
+    yingtian: [34.675590, 112.460824],
+    yadu_north: [34.684805, 112.484633],
+    yantian: [34.62984, 112.474960],
+    baoyuan: [34.68329, 112.485100],
+    wuge: [34.68018, 112.452400],
+    st: [34.593992, 112.458694]
+  };
+  function placeOf(id) {
+    if (SPOTS[id]) return { kind: 'spot', name: SPOTS[id].nav || SPOTS[id].name, obj: SPOTS[id] };
+    if (FOOD[id]) return { kind: 'food', name: FOOD[id].nav || FOOD[id].name, obj: FOOD[id] };
+    if (HOTELS[id]) return { kind: 'hotel', name: HOTELS[id].nav || HOTELS[id].name, obj: HOTELS[id] };
+    if (id === 'st') return { kind: 'station', name: '洛阳龙门站', obj: {} };
+    return null;
+  }
+  /* 地图跳转：高德 / 百度 / 腾讯（都用 https 链接，装了 App 会唤起，没装回落网页） */
+  function navUrls(id) {
+    var P = placeOf(id);
+    if (!P) return null;
+    var c = PLACE_COORD[id];
+    var nm = encodeURIComponent(P.name);
+    if (!c) {
+      return { amap: 'https://uri.amap.com/search?keyword=' + nm + '&city=洛阳&src=lytrip',
+        baidu: 'https://api.map.baidu.com/geocoder?address=' + nm + '&city=洛阳&output=html&src=lytrip',
+        qq: 'https://apis.map.qq.com/uri/v1/search?keyword=' + nm + '&referer=lytrip' };
+    }
+    var lat = c[0], lng = c[1];
+    return {
+      amap: 'https://uri.amap.com/navigation?to=' + lng + ',' + lat + ',' + nm + '&mode=car&coordinate=gaode&callnative=1&src=lytrip',
+      baidu: 'https://api.map.baidu.com/direction?destination=latlng:' + lat + ',' + lng + '|name:' + nm + '&mode=driving&region=洛阳&output=html&src=lytrip',
+      qq: 'https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=' + nm + '&tocoord=' + lat + ',' + lng + '&policy=0&referer=lytrip'
+    };
+  }
+
   var TICKETS = {
     go: [
       { d: '11/19 周四', no: 'K269', dep: '20:52', from: '北京丰台', arr: '07:26', to: '洛阳', nd: 1, dur: '10 小时 34 分', price: '硬卧 ¥184 · 软卧 ¥285', tag: '卧铺', note: '次日 07:26 到洛阳站，比团队早到 2.5 小时', date: '2026-11-19' },
@@ -668,7 +741,7 @@ button{font:inherit;color:inherit}
   /* ---------- 待定与清单 ---------- */
   var TODO = {
     decide: [
-      { t: '当地交通：租车还是打车', d: '景点串好之后再算成本。参考页原方案是包 33 座大巴（约 ¥3,000），你们说不包车，已从预算中去掉。' },
+      { t: '打车费用怎么分摊', d: '按车均摊还是各付各的；每天大约 4–5 辆车。' },
       { t: '住哪家亚朵', d: '首选应天门亚朵（老城区九都路与金业路交叉口，参考页写“步行可达应天门和洛邑古城”）；备选北门亚朵（中州东路 216 号）和全季丽景门。' },
       { t: '房型：8 间双床 + 1 间单人', d: '你们定的是两人一间、一人单住；参考页写的是 9 间全部双床。单人间价格待酒店确认，预算先按 ¥380 估。' },
       { t: '返程：要不要吃完晚饭再走', d: '参考页安排的是 G362 17:36 直达，晚饭时间很紧。想 19:00 后再走，就要转车（G7958 + G324，22:32 到北京西，需 12306 核实）。' },
@@ -700,6 +773,63 @@ button{font:inherit;color:inherit}
 
 
 
+
+  /* ---------- 地点弹窗：导航 / 房间分组 ---------- */
+  function openSheet(title, body) {
+    var m = document.getElementById('mask');
+    if (!m) return;
+    document.getElementById('shTitle').textContent = title;
+    document.getElementById('shBody').innerHTML = body;
+    m.hidden = false;
+  }
+  function closeSheet() {
+    var m = document.getElementById('mask');
+    if (m) m.hidden = true;
+  }
+  function bindSheet() {
+    var m = document.getElementById('mask');
+    if (!m || m.getAttribute('data-bound')) return;
+    m.setAttribute('data-bound', '1');
+    m.addEventListener('click', function (e) {
+      if (e.target === m) closeSheet();
+      if (e.target && e.target.id === 'shClose') closeSheet();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+  }
+  function navSheet(id) {
+    var P = placeOf(id), u = navUrls(id);
+    if (!P || !u) return;
+    var body =
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.amap + '"><i>高</i>在高德地图打开<small>驾车导航</small></a>' +
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.baidu + '"><i>百</i>在百度地图打开<small>驾车导航</small></a>' +
+      '<a class="navopt" target="_blank" rel="noopener" href="' + u.qq + '"><i>腾</i>在腾讯地图打开<small>驾车导航</small></a>' +
+      '<button type="button" class="navopt" data-copy="' + esc(P.name) + '" data-msg="已复制：' + esc(P.name) + '"><i>复</i>复制目的地名称<small>' + esc(P.name) + '</small></button>' +
+      '<p class="sh-note">微信里打不开是平台限制，点右上角「···」→ 在浏览器打开；高德/百度/腾讯已装 App 会自动唤起。</p>';
+    openSheet(P.name, body);
+    $$('#shBody [data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        copyText(b.getAttribute('data-copy'), b.getAttribute('data-msg') || '已复制');
+      });
+    });
+  }
+  function roomSheet() {
+    var rows = [
+      ['总人数', '17 人（14 男 / 3 女）'],
+      ['房型需求', '8 双床 + 1 单人（9 间）'],
+      ['女生安排', '3 人可接受三人间，或 1 双床 + 1 单人'],
+      ['入住/退房', '11/20 14:30 起 · 11/21 07:30 退房'],
+      ['早餐', '¥48/人 · 工作日 07:00–10:30']
+    ];
+    var body = rows.map(function (r) { return '<div class="roomrow"><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></div>'; }).join('') +
+      '<p class="sh-note">具体分房名单待补，确定后直接替换这里。</p>' +
+      '<button type="button" class="navopt" style="margin-top:10px" data-copy="17 人：8 双床 + 1 单人（9 间）" data-msg="已复制房间需求"><i>复</i>复制房间需求<small>发给酒店</small></button>';
+    openSheet('房间分组', body);
+    $$('#shBody [data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        copyText(b.getAttribute('data-copy'), b.getAttribute('data-msg') || '已复制');
+      });
+    });
+  }
 
   /* ---------- 工具函数 ---------- */
   function $(s, r) { return (r || document).querySelector(s); }
@@ -844,7 +974,7 @@ button{font:inherit;color:inherit}
         html += '<div class="tl-day"><b>第 ' + x.d + ' 天</b>' + (x.d === 1 ? '11/20 周五' : '11/21 周六') + '</div>';
       }
       var done = x.e < now, cur = x.s <= now && now <= x.e;
-      html += evHTML(x.item, x.d, cur ? 'now' : (done ? 'done' : ''));
+      html += evHTML(x.item, x.d, cur ? 'now' : (done ? 'done' : ''), false);
     });
     return html + '</div>';
   }
@@ -907,7 +1037,7 @@ button{font:inherit;color:inherit}
   }
 
   /* ---------- 二级：行程 ---------- */
-  function evHTML(it, n, extra) {
+  function evHTML(it, n, extra, withActs) {
     var m = it.t.match(/(\d{1,2}):(\d{2})/g) || [];
     var s = m[0] ? toMin(m[0]) : -1;
     var e = m[1] ? toMin(m[1]) : s;
@@ -919,8 +1049,22 @@ button{font:inherit;color:inherit}
       '<div class="b"><div class="bt">' + esc(it.title) + '</div>' +
       (it.desc ? '<div class="bd">' + esc(it.desc) + '</div>' : '') +
       ((tags || link) ? '<div class="ef">' + tags + link + '</div>' : '') +
+      (withActs === false ? '' : evActs(it)) +
       '</div></div>';
   }
+  /* 行程条目上的地点按钮：导航 / 景点介绍 / 房间分组 */
+  function evActs(it) {
+    var id = it.place;
+    if (!id) return '';
+    var P = placeOf(id);
+    if (!P) return '';
+    var h = '<div class="ev-acts"><button type="button" class="ev-act p" data-nav="' + id + '">导航</button>';
+    if (P.kind === 'spot' && SPOTS[id]) h += '<a class="ev-act" href="#/spot/' + id + '">景点介绍</a>';
+    else if (P.kind === 'hotel') h += '<button type="button" class="ev-act" data-room="1">房间分组</button>';
+    else if (P.kind === 'food') h += '<a class="ev-act" href="#/food/' + id + '">餐厅详情</a>';
+    return h + '</div>';
+  }
+
   function pageItinerary(n) {
     var D = DAYS[n - 1];
     var html = '<div class="seg">' +
@@ -1000,6 +1144,17 @@ button{font:inherit;color:inherit}
     stat.innerHTML = '<b>当前位置</b><span>' + esc(label) + '</span><i>' + pad2(Math.floor(nowMin / 60)) + ':' + pad2(Math.floor(nowMin % 60)) + '</i>';
   }
   function bindItinerary(dayN) {
+    bindSheet();
+    var tl = document.getElementById('tl');
+    if (tl) {
+      tl.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.getAttribute) return;
+        var nid = t.getAttribute('data-nav');
+        if (nid) { navSheet(nid); return; }
+        if (t.getAttribute('data-room')) roomSheet();
+      });
+    }
     MAP_STATE.day = dayN;
     markDayState(dayN);
     clearInterval(progTimer);
@@ -1222,12 +1377,59 @@ button{font:inherit;color:inherit}
       '<span class="sc-day">' + esc(S.when) + '</span><span class="sc-price">' + esc(S.price) + '</span></div>' +
       '<div class="sc-b"><h3>' + esc(S.name) + '</h3><p>' + esc(S.summary) + '</p></div></a>';
   }
-  function pageSpots() {
-    var html = sh('必去', '按行程顺序');
-    html += '<div class="list">' + ['guren', 'baima', 'gucheng', 'longmen'].map(spotCard).join('') + '</div>';
-    html += sh('第 2 天下午可选', '自费，不计入预算');
-    html += '<div class="list">' + ['guanlin', 'yingtian', 'mingtang'].map(spotCard).join('') + '</div>';
-    return { title: '景点', back: '#/', tab: 'spots', html: html };
+  /* ---------- 地点：景点 / 住宿 / 美食 ---------- */
+  function placeCard(id) {
+    var P = placeOf(id), o = P.obj, href, meta, img;
+    if (P.kind === 'spot') {
+      href = '#/spot/' + id; img = IMG[o.img];
+      meta = o.when + ' · ' + o.price;
+    } else if (P.kind === 'hotel') {
+      href = '#/hotel/' + id; img = IMG[o.photos[0][0]];
+      meta = (o.rating || '') + (o.addr ? ' · ' + o.addr : '');
+    } else {
+      href = '#/food/' + id; img = IMG[o.img];
+      meta = o.when + ' · ' + o.price;
+    }
+    var acts = '<button type="button" class="ev-act p" data-nav="' + id + '">导航</button>';
+    if (P.kind === 'spot') acts += '<a class="ev-act" href="' + href + '">景点介绍</a>';
+    else if (P.kind === 'hotel') acts += '<a class="ev-act" href="' + href + '">酒店详情</a><button type="button" class="ev-act" data-room="1">房间分组</button>';
+    else acts += '<a class="ev-act" href="' + href + '">餐厅详情</a>';
+    return '<div class="pcard"><a class="pcard-main" href="' + href + '">' +
+      '<div class="pcard-img"><img src="' + img + '" alt="' + esc(o.name) + '" loading="lazy" decoding="async"></div>' +
+      '<div class="pcard-t"><b>' + esc(o.name) + '</b><span>' + esc(meta) + '</span></div></a>' +
+      '<div class="pc-act">' + acts + '</div></div>';
+  }
+  function placeListHTML(cat) {
+    if (cat === 'hotel') return '<div class="list">' + ['yadu_north'].map(placeCard).join('') + '</div>' +
+      '<p class="note">酒店已定：洛邑古城北门亚朵，2026 年新开业，距洛邑古城约 310 米。含早 ¥48/人，前台 0379-62229999。</p>';
+    if (cat === 'food') return '<div class="list">' + ['yantian', 'baoyuan', 'wuge'].map(placeCard).join('') + '</div>' +
+      '<p class="note">餐厅还没最终定，先按现在这三家放；定下来我再替换。</p>';
+    return sh('必去', '按行程顺序') + '<div class="list">' + ['guren', 'baima', 'gucheng', 'longmen'].map(placeCard).join('') + '</div>' +
+      sh('第 2 天下午可选', '自费，不计入预算') + '<div class="list">' + ['yingtian', 'mingtang', 'guanlin'].map(placeCard).join('') + '</div>';
+  }
+  function pagePlaces() {
+    var cats = [['spot', '景点 · 行'], ['hotel', '住宿 · 住'], ['food', '美食 · 食']];
+    var html = '<div class="seg catbar three" id="catbar">' + cats.map(function (c, i) {
+      return '<a href="javascript:;" data-cat="' + c[0] + '"' + (i === 0 ? ' class="on"' : '') + '>' + esc(c[1]) + '</a>';
+    }).join('') + '</div>';
+    html += '<div id="placeList">' + placeListHTML('spot') + '</div>';
+    return { title: '地点', back: '#/', tab: 'spots', html: html, after: bindPlaces };
+  }
+  function bindPlaces() {
+    bindSheet();
+    $$('#catbar a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        $$('#catbar a').forEach(function (x) { x.classList.toggle('on', x === a); });
+        document.getElementById('placeList').innerHTML = placeListHTML(a.getAttribute('data-cat'));
+      });
+    });
+    document.getElementById('placeList').addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.getAttribute) return;
+      var nid = t.getAttribute('data-nav');
+      if (nid) { navSheet(nid); return; }
+      if (t.getAttribute('data-room')) roomSheet();
+    });
   }
 
   /* ---------- 三级：景点详情 ---------- */
@@ -1294,7 +1496,6 @@ button{font:inherit;color:inherit}
       rows.map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td><td class="n">' + r[2] + '</td></tr>'; }).join('') +
       '</tbody></table>');
     html += sh('当地交通', '待定');
-    html += '<a class="wcard" href="#/todo"><b>租车还是打车，还没定</b><span>景点串好后再算成本。参考页原方案是包 33 座大巴，你们说不包车，已从预算中去掉。</span></a>';
     return html;
   }
   function pageEat(tab) {
@@ -1309,7 +1510,7 @@ button{font:inherit;color:inherit}
   /* ---------- 三级：餐厅 / 酒店 / 车次 详情 ---------- */
   function pageFood(id) {
     var F = FOOD[id];
-    if (!F) return { title: '未找到', back: '#/eat/food', tab: 'eat', html: '<p class="lead">这家餐厅不存在。</p>' };
+    if (!F) return { title: '未找到', back: '#/spots', tab: 'eat', html: '<p class="lead">这家餐厅不存在。</p>' };
     var html = '<div class="dt-hero"><img src="' + IMG[F.img] + '" alt="' + esc(F.name) + '">' +
       '<div class="dt-hero-tags"><span class="sc-day">' + esc(F.when) + '</span>' + tg('g', F.badge) + '</div></div>';
     html += '<div class="dt-body"><h1 class="dt-title">' + esc(F.name) + '</h1><p class="dt-price">' + esc(F.price) + '</p>';
@@ -1320,11 +1521,11 @@ button{font:inherit;color:inherit}
       html += box('备选', F.alts.map(function (a) { return '<div class="alt-i"><b>' + esc(a.t) + '</b><span>' + esc(a.x) + '</span></div>'; }).join(''));
     }
     html += '<div class="row2"><a class="btn" target="_blank" rel="noopener" href="' + amap(F.nav) + '">导航（高德搜索）</a><a class="btn ghost" href="#/eat/food">返回吃住行</a></div></div>';
-    return { title: F.short, back: '#/eat/food', tab: 'eat', html: html };
+    return { title: F.short, back: '#/spots', tab: 'eat', html: html };
   }
   function pageHotel(id) {
     var H = HOTELS[id];
-    if (!H) return { title: '未找到', back: '#/eat/hotel', tab: 'eat', html: '<p class="lead">这家酒店不存在。</p>' };
+    if (!H) return { title: '未找到', back: '#/spots', tab: 'eat', html: '<p class="lead">这家酒店不存在。</p>' };
     var gal = '<div class="gal">' + H.photos.map(function (p) {
       return '<figure><img src="' + IMG[p[0]] + '" alt="' + esc(p[1]) + '" loading="lazy" decoding="async"><figcaption>' + esc(p[1]) + '</figcaption></figure>';
     }).join('') + '</div>';
@@ -1333,7 +1534,7 @@ button{font:inherit;color:inherit}
     html += box('酒店信息', dl([['地址', H.addr], ['电话', H.tel], ['房型', '标准双床房（参考页按 ¥380 / 间估算）'], ['备注', H.note]]));
     html += '<div class="row2">' + (H.tel ? '<a class="btn" href="tel:' + H.tel.replace(/[^0-9]/g, '') + '">拨打酒店</a>' : '<a class="btn" href="#/eat/hotel">返回住宿</a>') +
       '<a class="btn ghost" target="_blank" rel="noopener" href="' + amap(H.nav) + '">导航</a></div></div>';
-    return { title: H.short, back: '#/eat/hotel', tab: 'eat', html: html };
+    return { title: H.short, back: '#/spots', tab: 'eat', html: html };
   }
   function pageTrain(id) {
     var T = TRAINS[id];
@@ -1398,7 +1599,7 @@ button{font:inherit;color:inherit}
     var kept = BUDGET.filter(function (r) { return !r.pend; });
     var html = '<div class="kpi"><div><small>人均 · 不含当地交通</small><b>约 ¥1,410</b><em>目标 ¥1,400，超约 ¥10</em></div>' +
       '<div><small>17 人合计</small><b>¥23,963</b><em>不含当地交通</em></div></div>';
-    html += '<div class="kpi2"><div><small>参考页人均（含包大巴）</small><b>¥1,586</b></div><div><small>参考页合计</small><b>¥26,960</b></div></div>';
+    html += '<div class="kpi2"><div><small>参考页人均</small><b>¥1,216</b></div><div><small>参考页合计</small><b>¥20,672</b></div></div>';
     html += '<div class="bar">' + kept.map(function (r) { return '<i style="flex:' + r.tot + ';background:' + r.c + '"></i>'; }).join('') + '</div>';
     html += '<div class="legend">' + kept.map(function (r) { return '<span style="--c:' + r.c + '">' + esc(r.k) + ' ' + r.tot.toLocaleString('en-US') + '</span>'; }).join('') + '</div>';
     html += '<div class="tblwrap"><table class="bt2"><thead><tr><th>项目</th><th>说明</th><th class="n">合计</th><th class="n">人均</th></tr></thead><tbody>' +
@@ -1426,8 +1627,10 @@ button{font:inherit;color:inherit}
     switch (p[0]) {
       case 'itinerary': return pageItinerary(a === 'd2' ? 2 : 1);
       case 'map': return pageItinerary(1);
-      case 'spots': return pageSpots();
+      case 'spots': return pagePlaces();
       case 'spot': return pageSpot(a);
+      case 'food': return pageFood(a);
+      case 'hotel': return pageHotel(a);
       case 'project': return a === 'ticket' ? pageTicket() : pageProject();
       default: return pageHome();
     }
