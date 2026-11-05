@@ -470,7 +470,7 @@ img{cursor:zoom-in}
     },
     longmen: {
       name: '龙门石窟', short: '龙门石窟', when: '第 2 天 · 上午', price: '90 元/人', must: true, img: 'longmen', nav: '龙门石窟',
-      navQuery: '龙门石窟西北服务区',
+      navQuery: '龙门石窟西北服务区', amap: 'https://surl.amap.com/SiMCqm14Ym',
       summary: '北魏至北宋开凿的石刻群，奉先寺卢舍那大佛是核心',
       intro: '中国三大石窟之一，2000 年列入世界文化遗产。北魏孝文帝迁都洛阳前后开始开凿，历经北魏至北宋 400 余年，伊河两岸现存窟龛 2,300 余个、造像 10 万余尊。核心是奉先寺的卢舍那大佛，通高 17.14 米，唐代石刻艺术的巅峰。',
       facts: [
@@ -804,14 +804,15 @@ img{cursor:zoom-in}
     if (!T) return null;
     var P = T.P, c = T.coord;
     var nm = encodeURIComponent(T.name);
+    var amapOverride = P.obj && P.obj.amap;
     if (!c) {
-      return { amap: 'https://uri.amap.com/search?keyword=' + nm + '&city=洛阳&src=lytrip',
+      return { amap: amapOverride || ('https://uri.amap.com/search?keyword=' + nm + '&city=洛阳&src=lytrip'),
         baidu: 'https://api.map.baidu.com/geocoder?address=' + nm + '&city=洛阳&output=html&src=lytrip',
         qq: 'https://apis.map.qq.com/uri/v1/search?keyword=' + nm + '&referer=lytrip' };
     }
     var lat = c[0], lng = c[1];
     return {
-      amap: 'https://uri.amap.com/navigation?to=' + lng + ',' + lat + ',' + nm + '&mode=car&coordinate=gaode&callnative=1&src=lytrip',
+      amap: amapOverride || ('https://uri.amap.com/navigation?to=' + lng + ',' + lat + ',' + nm + '&mode=car&coordinate=gaode&callnative=1&src=lytrip'),
       baidu: 'https://api.map.baidu.com/direction?destination=latlng:' + lat + ',' + lng + '|name:' + nm + '&mode=driving&region=洛阳&output=html&src=lytrip',
       qq: 'https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=' + nm + '&tocoord=' + lat + ',' + lng + '&policy=0&referer=lytrip'
     };
