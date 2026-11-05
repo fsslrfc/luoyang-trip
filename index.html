@@ -782,6 +782,16 @@ img{cursor:zoom-in}
     st: 'https://surl.amap.com/KnTlSei3EG'
   };
 
+  /* 百度地图 POI 短链：百度 App/网页对地点“分享”生成 */
+  var PLACE_BAIDU = {
+    longmen: 'https://j.map.baidu.com/b8/RA1M',
+    guren: 'https://j.map.baidu.com/92/LbzJ',
+    baima: 'https://j.map.baidu.com/07/T_wJ',
+    gucheng: 'https://j.map.baidu.com/7c/82xJ',
+    yadu_north: 'https://j.map.baidu.com/ba/Ip5M',
+    st: 'https://j.map.baidu.com/5b/fvwJ'
+  };
+
   /* 地点坐标（腾讯地图检索所得，GCJ-02）；导航与地图共用 */
   var PLACE_COORD = {
     guren: [34.732416, 112.415274],
@@ -815,15 +825,16 @@ img{cursor:zoom-in}
     var P = T.P, c = T.coord;
     var nm = encodeURIComponent(T.name);
     var amapOverride = PLACE_AMAP[id] || (P.obj && P.obj.amap);
+    var baiduOverride = PLACE_BAIDU[id];
     if (!c) {
       return { amap: amapOverride || ('https://uri.amap.com/search?keyword=' + nm + '&city=洛阳&src=lytrip'),
-        baidu: 'https://api.map.baidu.com/geocoder?address=' + nm + '&city=洛阳&output=html&src=lytrip',
+        baidu: baiduOverride || ('https://api.map.baidu.com/geocoder?address=' + nm + '&city=洛阳&output=html&src=lytrip'),
         qq: 'https://apis.map.qq.com/uri/v1/search?keyword=' + nm + '&referer=lytrip' };
     }
     var lat = c[0], lng = c[1];
     return {
       amap: amapOverride || ('https://uri.amap.com/navigation?to=' + lng + ',' + lat + ',' + nm + '&mode=car&coordinate=gaode&callnative=1&src=lytrip'),
-      baidu: 'https://api.map.baidu.com/direction?destination=latlng:' + lat + ',' + lng + '|name:' + nm + '&mode=driving&region=洛阳&output=html&src=lytrip',
+      baidu: baiduOverride || ('https://api.map.baidu.com/direction?destination=latlng:' + lat + ',' + lng + '|name:' + nm + '&mode=driving&region=洛阳&output=html&src=lytrip'),
       qq: 'https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=' + nm + '&tocoord=' + lat + ',' + lng + '&policy=0&referer=lytrip'
     };
   }
