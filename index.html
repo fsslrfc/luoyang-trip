@@ -166,11 +166,11 @@ button{font:inherit;color:inherit}
 .pinpop a{display:inline-block;margin-top:3px;font-size:12px;color:var(--red);font-weight:600}
 
 /* 项目页 */
-.proj{display:grid;gap:12px;margin-top:12px}
-.pj{display:grid;grid-template-columns:44px 1fr 16px;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:var(--sh)}
-.pj i{width:44px;height:44px;border-radius:13px;background:var(--gold-l);color:var(--red-d);display:grid;place-items:center;font-style:normal;font-family:"Songti SC",Georgia,serif;font-size:19px;font-weight:700}
-.pj b{display:block;font-size:16px;line-height:1.3}
-.pj span{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+.proj{display:grid;gap:12px;margin-top:16px}
+.pj{display:grid;grid-template-columns:52px 1fr 16px;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 16px;box-shadow:var(--sh)}
+.pj i{width:52px;height:52px;border-radius:15px;background:var(--gold-l);color:var(--red-d);display:grid;place-items:center;font-style:normal;font-family:"Songti SC",Georgia,serif;font-size:19px;font-weight:700}
+.pj b{display:block;font-size:17px;line-height:1.3}
+.pj span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.55}
 .pj .go{color:var(--muted);font-size:17px;text-align:right}
 .pj.off{opacity:.55}
 /* 车票卡 */
@@ -325,8 +325,10 @@ button{font:inherit;color:inherit}
 .roomrow:last-child{border-bottom:0}
 .roomrow span{color:var(--muted)}
 .roomrow em{font-style:normal;font-weight:700;color:var(--ink)}
-.catbar{position:sticky;top:50px;z-index:20;margin:6px 0 0;padding:6px 0;background:var(--paper)}
-#placeList{margin-top:12px}
+.segs-sticky{position:sticky;top:50px;z-index:20;background:var(--paper);padding:8px 0 9px;box-shadow:0 8px 12px -10px rgba(60,40,20,.5)}
+.seg.catbar{box-shadow:0 2px 7px rgba(60,40,20,.10)}
+#placeList{margin-top:4px}
+.sec-div{border-top:1px solid #9c8062;margin:22px 0 16px}
 .dt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .dt-head .dt-nav{margin-top:4px;flex:none;padding:6px 14px;font-size:13px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:11px}
@@ -1072,9 +1074,9 @@ button{font:inherit;color:inherit}
 
   function pageItinerary(n) {
     var D = DAYS[n - 1];
-    var html = '<div class="seg">' +
+    var html = '<div class="segs-sticky"><div class="seg">' +
       '<a href="#/itinerary/d1" class="' + (n === 1 ? 'on' : '') + '">第 1 天 · 周五</a>' +
-      '<a href="#/itinerary/d2" class="' + (n === 2 ? 'on' : '') + '">第 2 天 · 周六</a></div>';
+      '<a href="#/itinerary/d2" class="' + (n === 2 ? 'on' : '') + '">第 2 天 · 周六</a></div></div>';
     html += '<div class="dayhead"><b>' + esc(D.name) + '</b><span>' + esc(D.date) + '</span></div>';
     html += '<div class="flow">' + flowChips(D, n) + '</div>';
     html += '<div class="mapbox" id="mapbox"><div id="tmap" class="tmap"></div>' +
@@ -1397,15 +1399,15 @@ button{font:inherit;color:inherit}
   function placeListHTML(cat) {
     if (cat === 'hotel') return '<div class="list">' + ['yadu_north'].map(placeCard).join('') + '</div>';
     if (cat === 'food') return '<div class="list">' + ['yantian', 'baoyuan', 'wuge'].map(placeCard).join('') + '</div>';
-    return sh('必去', '按行程顺序') + '<div class="list">' + ['guren', 'baima', 'gucheng', 'longmen'].map(placeCard).join('') + '</div>' +
-      sh('第 2 天下午可选', '自费，不计入预算') + '<div class="list">' + ['yingtian', 'mingtang', 'guanlin'].map(placeCard).join('') + '</div>';
+    return sh('必去') + '<div class="list">' + ['guren', 'baima', 'gucheng', 'longmen'].map(placeCard).join('') + '</div>' +
+      '<div class="sec-div"></div>' + sh('可选') + '<div class="list">' + ['yingtian', 'mingtang', 'guanlin'].map(placeCard).join('') + '</div>';
   }
   function pagePlaces(cat) {
     var cur = (cat === 'hotel' || cat === 'food') ? cat : 'spot';
     var cats = [['spot', '景点 · 行'], ['hotel', '住宿 · 住'], ['food', '美食 · 食']];
-    var html = '<div class="seg catbar three" id="catbar">' + cats.map(function (c) {
+    var html = '<div class="segs-sticky"><div class="seg catbar three" id="catbar">' + cats.map(function (c) {
       return '<a href="#/spots' + (c[0] === 'spot' ? '' : '/' + c[0]) + '" data-cat="' + c[0] + '"' + (c[0] === cur ? ' class="on"' : '') + '>' + esc(c[1]) + '</a>';
-    }).join('') + '</div>';
+    }).join('') + '</div></div>';
     html += '<div id="placeList">' + placeListHTML(cur) + '</div>';
     return { title: '地点', back: '#/', tab: 'spots', html: html, after: bindPlaces };
   }
@@ -1531,7 +1533,7 @@ button{font:inherit;color:inherit}
 
   /* ---------- 项目：车票 / 预约 / 打车 ---------- */
   function pageProject() {
-    var html = '<p class="lead">这里放需要大家动手做的事。点进去是外部页面，微信里打开如跳不动，点右上角“在浏览器打开”。</p>';
+    var html = '';
     html += '<div class="proj">' +
       '<a class="pj" href="#/project/ticket"><i>票</i><div><b>车票</b><span>去程：19 晚卧铺 / 20 早 G321；返程：21 下午 8 趟</span></div><span class="go">›</span></a>' +
       '<div class="pj off"><i>约</i><div><b>预约</b><span>景点实名预约（待做）</span></div></div>' +
