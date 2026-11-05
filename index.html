@@ -1599,7 +1599,7 @@ button{font:inherit;color:inherit}
     var kept = BUDGET.filter(function (r) { return !r.pend; });
     var html = '<div class="kpi"><div><small>人均 · 不含当地交通</small><b>约 ¥1,410</b><em>目标 ¥1,400，超约 ¥10</em></div>' +
       '<div><small>17 人合计</small><b>¥23,963</b><em>不含当地交通</em></div></div>';
-    html += '<div class="kpi2"><div><small>参考页人均</small><b>¥1,216</b></div><div><small>参考页合计</small><b>¥20,672</b></div></div>';
+    html += '<div class="kpi2"><div><small>参考页人均（不含大巴）</small><b>¥1,409</b></div><div><small>参考页合计</small><b>¥23,960</b></div></div>';
     html += '<div class="bar">' + kept.map(function (r) { return '<i style="flex:' + r.tot + ';background:' + r.c + '"></i>'; }).join('') + '</div>';
     html += '<div class="legend">' + kept.map(function (r) { return '<span style="--c:' + r.c + '">' + esc(r.k) + ' ' + r.tot.toLocaleString('en-US') + '</span>'; }).join('') + '</div>';
     html += '<div class="tblwrap"><table class="bt2"><thead><tr><th>项目</th><th>说明</th><th class="n">合计</th><th class="n">人均</th></tr></thead><tbody>' +
