@@ -250,9 +250,9 @@ button{font:inherit;color:inherit}
 .box{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh);padding:12px 14px;margin-top:12px}
 .box h3{font-size:13.5px;color:var(--red-d);margin-bottom:6px;letter-spacing:.5px}
 .facts{display:grid}
-.facts>div{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line2);font-size:13px}
+.facts>div{display:grid;grid-template-columns:86px 1fr;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line2);font-size:13px}
 .facts>div:last-child{border-bottom:0}
-.facts dt{color:var(--ink);font-weight:600;font-size:12.5px}
+.facts dt{color:var(--ink);font-weight:600;font-size:12.5px;white-space:nowrap}
 .facts dd{color:var(--ink2);line-height:1.6}
 .bul{list-style:none;display:grid;gap:6px}
 .bul li{font-size:13px;color:var(--ink2);line-height:1.65;padding-left:14px;position:relative}
@@ -338,6 +338,11 @@ button{font:inherit;color:inherit}
 .rt li::before{content:counter(rt);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
 .rt li b{display:block;font-size:14px;line-height:1.5;color:var(--ink)}
 .rt li span{display:block;font-size:12.5px;color:var(--ink2);line-height:1.7;margin-top:2px}
+.near{list-style:none;display:grid;gap:5px}
+.near li{position:relative;padding-left:11px;line-height:1.5;display:flex;justify-content:space-between;gap:10px}
+.near li::before{content:"·";position:absolute;left:2px;top:0;color:var(--muted);font-weight:700}
+.near li span{white-space:nowrap}
+.near li em{font-style:normal;color:var(--muted);white-space:nowrap;font-size:12px}
 .mapfig{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
 .mapfig img{width:100%;display:block}
 .mapnote{font-size:12px;color:var(--muted);line-height:1.7;margin-top:8px}
@@ -621,7 +626,9 @@ button{font:inherit;color:inherit}
       note: '参考页：步行可达应天门和洛邑古城'
     },
     yadu_north: {
-      name: '洛阳洛邑古城北门亚朵酒店', short: '北门亚朵', badge: '已定', rating: '评分 4.8 · 起价 ¥375 · 2026 年新开业', addr: '老城区中州东路 216 号（洛邑古城地铁站 A3 口步行 3 分钟）', tel: '0379-62229999', nav: '洛阳洛邑古城北门亚朵酒店',
+      name: '洛阳洛邑古城北门亚朵酒店', short: '北门亚朵', badge: '', rating: '评分 4.8 · 2026 年新开业', addr: '老城区中州东路 216 号（洛邑古城地铁站 A3 口步行 3 分钟）', tel: '0379-62229999', nav: '洛阳洛邑古城北门亚朵酒店',
+      roomType: '行政双床房 / 行政大床房', breakfast: '含', bfTime: '07:00–10:30',
+      near: [['洛邑古城', '约 310 米', '走路 4 分钟'], ['丽景门', '约 370 米', '走路 5 分钟'], ['龙门站', '约 10 公里', '打车 30 分钟'], ['白马寺', '约 12 公里', '打车 25 分钟'], ['龙门石窟', '约 15 公里', '打车 26 分钟']],
       photos: [['h_bm_out', '酒店外观'], ['h_bm_lobby', '大堂书吧'], ['h_bm_bed', '双床房']],
       note: '距洛邑古城约 310 米、丽景门约 370 米；86 间房，含早 ¥48/人（工作日 07:00–10:30）；距白马寺约 25 分钟、龙门站约 30 分钟车程'
     },
@@ -1574,9 +1581,18 @@ button{font:inherit;color:inherit}
     var gal = '<div class="gal">' + H.photos.map(function (p) {
       return '<figure><img src="' + IMG[p[0]] + '" alt="' + esc(p[1]) + '" loading="lazy" decoding="async"><figcaption>' + esc(p[1]) + '</figcaption></figure>';
     }).join('') + '</div>';
-    var html = '<div class="dt-body">' + tg(H.badge.indexOf('首选') > -1 ? 'r' : 'k', H.badge) +
+    var html = '<div class="dt-body">' + (H.badge ? tg(H.badge.indexOf('首选') > -1 ? 'r' : 'k', H.badge) : '') +
       '<h1 class="dt-title">' + esc(H.name) + '</h1>' + (H.rating ? '<p class="dt-price">' + esc(H.rating) + '</p>' : '') + gal;
-    html += box('酒店信息', dl([['地址', H.addr], ['电话', H.tel], ['房型', '行政双床房 / 行政大床房'], ['备注', H.note]]));
+    html += box('酒店信息', '<dl class="facts">' +
+      '<div><dt>地址</dt><dd>' + esc(H.addr) + '</dd></div>' +
+      '<div><dt>电话</dt><dd>' + esc(H.tel) + '</dd></div>' +
+      '<div><dt>房型</dt><dd>' + esc(H.roomType || '') + '</dd></div>' +
+      '<div><dt>是否含早餐</dt><dd>' + esc(H.breakfast || '') + '</dd></div>' +
+      '<div><dt>早餐时间段</dt><dd>' + esc(H.bfTime || '') + '</dd></div>' +
+      ((H.near && H.near.length) ? '<div><dt>附近景区</dt><dd><ul class="near">' + H.near.map(function (n) {
+        return '<li><span>距 ' + esc(n[0]) + ' ' + esc(n[1]) + '</span><em>' + esc(n[2]) + '</em></li>';
+      }).join('') + '</ul></dd></div>' : '') +
+      '</dl>');
     html += '<div class="row2"><button type="button" class="btn" data-room="1">房间分组</button>' +
       '<button type="button" class="btn ghost" data-nav="' + id + '">导航</button></div></div>';
     return { title: H.short, back: '#/spots/hotel', tab: 'spots', html: html, after: bindSheet };
