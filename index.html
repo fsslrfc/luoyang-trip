@@ -1518,7 +1518,7 @@ button{font:inherit;color:inherit}
     }
     if (S.mapImg || S.mapNote) {
       html += box(S.mapImg ? '指引地图' : '指引',
-        (S.mapImg ? '<figure class="mapfig"><img src="' + IMG[S.mapImg] + '" alt="' + esc(S.name) + '导览图" loading="lazy" decoding="async"></figure>' : '') +
+        (S.mapImg ? '<figure class="mapfig"><img src="' + IMG[S.mapImg] + '" alt="' + esc(S.name) + '导览图"></figure>' : '') +
         (S.mapNote ? '<p class="mapnote">' + esc(S.mapNote) + '</p>' : ''));
     }
     html += '</div>';
