@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<script src="https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=4ZFBZ-FAGCW-AZ7RN-3KAJV-JTIQK-CTB22"></script>
+</head><body><pre id="out"></pre><script>
+(function(){var o=document.getElementById('out');function log(t){o.textContent+=t+"\n";}
+if(typeof TMap==='undefined'||!TMap.service){log('NO SERVICE');return;}
+var qs=['洛阳洛邑古城北门亚朵酒店','亚朵酒店 中州东路216号','洛邑古城地铁站'];
+qs.reduce(function(p,q){return p.then(function(){
+  return new TMap.service.Search({pageSize:5}).searchRegion({keyword:q,cityName:'洛阳市',autoExtend:true}).then(function(r){
+    var d=(r&&r.data)||[]; log('--'+q+' ('+d.length+')');
+    d.forEach(function(x){ log('   '+(x.title||'')+' | '+(x.location?x.location.lat.toFixed(6)+','+x.location.lng.toFixed(6):'-')+' | '+(x.address||'')); });
+  }).catch(function(e){log(q+' ERR '+(e&&e.message||e));});
+});},Promise.resolve());})();
+</script></body></html>
