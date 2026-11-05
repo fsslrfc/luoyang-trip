@@ -324,7 +324,9 @@ button{font:inherit;color:inherit}
 .roomrow{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
 .roomrow:last-child{border-bottom:0}
 .roomrow span{color:var(--muted)}
-.catbar{margin:6px 0 4px}
+.roomrow em{font-style:normal;font-weight:700;color:var(--ink)}
+.catbar{position:sticky;top:50px;z-index:20;margin:6px 0 0;padding:6px 0;background:var(--paper)}
+#placeList{margin-top:12px}
 .dt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .dt-head .dt-nav{margin-top:4px;flex:none;padding:6px 14px;font-size:13px}
 .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:11px}
@@ -823,12 +825,14 @@ button{font:inherit;color:inherit}
   }
   function roomSheet() {
     var rows = [
-      ['总人数', '17 人'],
-      ['最早入住', '11/20 14:00'],
-      ['最晚退房', '11/21 14:00'],
-      ['早餐', '含早餐']
+      ['最早入住', '11/20 14:00', false],
+      ['最晚退房', '11/21 14:00', false],
+      ['是否含早餐', '含早餐', true]
     ];
-    var body = rows.map(function (r) { return '<div class="roomrow"><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + '</span></div>'; }).join('');
+    var body = rows.map(function (r) {
+      return '<div class="roomrow"><b>' + esc(r[0]) + '</b>' +
+        (r[2] ? '<em>' + esc(r[1]) + '</em>' : '<span>' + esc(r[1]) + '</span>') + '</div>';
+    }).join('');
     openSheet('房间分组', body);
   }
 
@@ -1061,7 +1065,7 @@ button{font:inherit;color:inherit}
     if (!P) return '';
     var h = '<div class="ev-acts"><button type="button" class="ev-act p" data-nav="' + id + '">导航</button>';
     if (P.kind === 'spot' && SPOTS[id]) h += '<a class="ev-act" href="#/spot/' + id + '">景点介绍</a>';
-    else if (P.kind === 'hotel') h += '<button type="button" class="ev-act" data-room="1">房间分组</button>';
+    else if (P.kind === 'hotel') h += '<a class="ev-act" href="#/hotel/' + id + '">酒店详情</a>';
     else if (P.kind === 'food') h += '<a class="ev-act" href="#/food/' + id + '">餐厅详情</a>';
     return h + '</div>';
   }
@@ -1391,29 +1395,22 @@ button{font:inherit;color:inherit}
       '<div class="pc-act">' + acts + '</div></div>';
   }
   function placeListHTML(cat) {
-    if (cat === 'hotel') return '<div class="list">' + ['yadu_north'].map(placeCard).join('') + '</div>' +
-      '<p class="note">酒店已定：洛邑古城北门亚朵，2026 年新开业，距洛邑古城约 310 米。含早 ¥48/人，前台 0379-62229999。</p>';
-    if (cat === 'food') return '<div class="list">' + ['yantian', 'baoyuan', 'wuge'].map(placeCard).join('') + '</div>' +
-      '<p class="note">餐厅还没最终定，先按现在这三家放；定下来我再替换。</p>';
+    if (cat === 'hotel') return '<div class="list">' + ['yadu_north'].map(placeCard).join('') + '</div>';
+    if (cat === 'food') return '<div class="list">' + ['yantian', 'baoyuan', 'wuge'].map(placeCard).join('') + '</div>';
     return sh('必去', '按行程顺序') + '<div class="list">' + ['guren', 'baima', 'gucheng', 'longmen'].map(placeCard).join('') + '</div>' +
       sh('第 2 天下午可选', '自费，不计入预算') + '<div class="list">' + ['yingtian', 'mingtang', 'guanlin'].map(placeCard).join('') + '</div>';
   }
-  function pagePlaces() {
+  function pagePlaces(cat) {
+    var cur = (cat === 'hotel' || cat === 'food') ? cat : 'spot';
     var cats = [['spot', '景点 · 行'], ['hotel', '住宿 · 住'], ['food', '美食 · 食']];
-    var html = '<div class="seg catbar three" id="catbar">' + cats.map(function (c, i) {
-      return '<a href="javascript:;" data-cat="' + c[0] + '"' + (i === 0 ? ' class="on"' : '') + '>' + esc(c[1]) + '</a>';
+    var html = '<div class="seg catbar three" id="catbar">' + cats.map(function (c) {
+      return '<a href="#/spots' + (c[0] === 'spot' ? '' : '/' + c[0]) + '" data-cat="' + c[0] + '"' + (c[0] === cur ? ' class="on"' : '') + '>' + esc(c[1]) + '</a>';
     }).join('') + '</div>';
-    html += '<div id="placeList">' + placeListHTML('spot') + '</div>';
+    html += '<div id="placeList">' + placeListHTML(cur) + '</div>';
     return { title: '地点', back: '#/', tab: 'spots', html: html, after: bindPlaces };
   }
   function bindPlaces() {
     bindSheet();
-    $$('#catbar a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        $$('#catbar a').forEach(function (x) { x.classList.toggle('on', x === a); });
-        document.getElementById('placeList').innerHTML = placeListHTML(a.getAttribute('data-cat'));
-      });
-    });
   }
 
   /* ---------- 三级：景点详情 ---------- */
@@ -1493,7 +1490,7 @@ button{font:inherit;color:inherit}
   /* ---------- 三级：餐厅 / 酒店 / 车次 详情 ---------- */
   function pageFood(id) {
     var F = FOOD[id];
-    if (!F) return { title: '未找到', back: '#/spots', tab: 'eat', html: '<p class="lead">这家餐厅不存在。</p>' };
+    if (!F) return { title: '未找到', back: '#/spots/food', tab: 'spots', html: '<p class="lead">这家餐厅不存在。</p>' };
     var html = '<div class="dt-hero"><img src="' + IMG[F.img] + '" alt="' + esc(F.name) + '">' +
       '<div class="dt-hero-tags"><span class="sc-day">' + esc(F.when) + '</span>' + tg('g', F.badge) + '</div></div>';
     html += '<div class="dt-body"><h1 class="dt-title">' + esc(F.name) + '</h1><p class="dt-price">' + esc(F.price) + '</p>';
@@ -1504,20 +1501,20 @@ button{font:inherit;color:inherit}
       html += box('备选', F.alts.map(function (a) { return '<div class="alt-i"><b>' + esc(a.t) + '</b><span>' + esc(a.x) + '</span></div>'; }).join(''));
     }
     html += '<div class="row2"><a class="btn" target="_blank" rel="noopener" href="' + amap(F.nav) + '">导航（高德搜索）</a><a class="btn ghost" href="#/eat/food">返回吃住行</a></div></div>';
-    return { title: F.short, back: '#/spots', tab: 'eat', html: html };
+    return { title: F.short, back: '#/spots/food', tab: 'spots', html: html, after: bindSheet };
   }
   function pageHotel(id) {
     var H = HOTELS[id];
-    if (!H) return { title: '未找到', back: '#/spots', tab: 'eat', html: '<p class="lead">这家酒店不存在。</p>' };
+    if (!H) return { title: '未找到', back: '#/spots/hotel', tab: 'spots', html: '<p class="lead">这家酒店不存在。</p>' };
     var gal = '<div class="gal">' + H.photos.map(function (p) {
       return '<figure><img src="' + IMG[p[0]] + '" alt="' + esc(p[1]) + '" loading="lazy" decoding="async"><figcaption>' + esc(p[1]) + '</figcaption></figure>';
     }).join('') + '</div>';
     var html = '<div class="dt-body">' + tg(H.badge.indexOf('首选') > -1 ? 'r' : 'k', H.badge) +
       '<h1 class="dt-title">' + esc(H.name) + '</h1>' + (H.rating ? '<p class="dt-price">' + esc(H.rating) + '</p>' : '') + gal;
-    html += box('酒店信息', dl([['地址', H.addr], ['电话', H.tel], ['房型', '标准双床房（参考页按 ¥380 / 间估算）'], ['备注', H.note]]));
-    html += '<div class="row2">' + (H.tel ? '<a class="btn" href="tel:' + H.tel.replace(/[^0-9]/g, '') + '">拨打酒店</a>' : '<a class="btn" href="#/eat/hotel">返回住宿</a>') +
-      '<a class="btn ghost" target="_blank" rel="noopener" href="' + amap(H.nav) + '">导航</a></div></div>';
-    return { title: H.short, back: '#/spots', tab: 'eat', html: html };
+    html += box('酒店信息', dl([['地址', H.addr], ['电话', H.tel], ['房型', '行政双床房 / 行政大床房'], ['备注', H.note]]));
+    html += '<div class="row2"><button type="button" class="btn" data-room="1">房间分组</button>' +
+      '<button type="button" class="btn ghost" data-nav="' + id + '">导航</button></div></div>';
+    return { title: H.short, back: '#/spots/hotel', tab: 'spots', html: html, after: bindSheet };
   }
   function pageTrain(id) {
     var T = TRAINS[id];
@@ -1539,11 +1536,6 @@ button{font:inherit;color:inherit}
       '<a class="pj" href="#/project/ticket"><i>票</i><div><b>车票</b><span>去程：19 晚卧铺 / 20 早 G321；返程：21 下午 8 趟</span></div><span class="go">›</span></a>' +
       '<div class="pj off"><i>约</i><div><b>预约</b><span>景点实名预约（待做）</span></div></div>' +
       '</div>';
-    html += box('关于跳转', ul([
-      '车票：直接打开 12306 的查票页面，起终点和日期已经填好，选车次下单即可',
-      '打车：高德有官方网页唤起接口，能做；滴滴的唤起在微信里常被拦截，届时给网页入口',
-      '小程序：纯网页打不开小程序，只能给“微信搜 XXX 小程序”的指引'
-    ]));
     return { title: '项目', back: '#/', tab: 'project', html: html };
   }
   function tcard(t) {
@@ -1609,7 +1601,7 @@ button{font:inherit;color:inherit}
     switch (p[0]) {
       case 'itinerary': return pageItinerary(a === 'd2' ? 2 : 1);
       case 'map': return pageItinerary(1);
-      case 'spots': return pagePlaces();
+      case 'spots': return pagePlaces(a);
       case 'spot': return pageSpot(a);
       case 'food': return pageFood(a);
       case 'hotel': return pageHotel(a);
