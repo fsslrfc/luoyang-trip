@@ -323,6 +323,10 @@ button{font:inherit;color:inherit}
 .vw-hint{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;color:rgba(255,255,255,.5);font-size:12px;pointer-events:none}
 img{cursor:zoom-in}
 .mask{position:fixed;inset:0;z-index:120;background:rgba(30,20,12,.38);overflow:hidden}
+.mask.center{display:flex;align-items:center;justify-content:center;padding:0 20px}
+.mask.center .sheet2{position:relative;left:auto;right:auto;bottom:auto;width:100%;max-width:352px;border-radius:16px;max-height:76%;padding:18px 18px 16px;animation:pop .18s ease-out}
+@keyframes pop{from{transform:scale(.95);opacity:.5}to{transform:none;opacity:1}}
+.dlg-ok{width:100%;margin-top:14px;padding:12px 0;border:0;border-radius:11px;background:var(--red);color:#fff;font:inherit;font-size:15px;font-weight:700;letter-spacing:.5px}
 .mask[hidden]{display:none}
 .sheet2{position:absolute;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;box-sizing:border-box;max-height:82%;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--paper);border-radius:16px 16px 0 0;padding:14px 16px calc(28px + env(safe-area-inset-bottom));box-shadow:0 -8px 28px rgba(40,20,10,.22);animation:up .22s ease-out}
 @keyframes up{from{transform:translateY(14px);opacity:.6}to{transform:none;opacity:1}}
@@ -1025,11 +1029,12 @@ img{cursor:zoom-in}
   }
 
   /* ---------- 地点弹窗：导航 / 房间分组 ---------- */
-  function openSheet(title, body) {
+  function openSheet(title, body, center) {
     var m = document.getElementById('mask');
     if (!m) return;
     document.getElementById('shTitle').textContent = title;
     document.getElementById('shBody').innerHTML = body;
+    m.classList.toggle('center', !!center);
     m.hidden = false;
     document.body.classList.add('sheet-open');
   }
@@ -1053,6 +1058,7 @@ img{cursor:zoom-in}
       var n = t.closest('[data-nav]');
       if (n) { navSheet(n.getAttribute('data-nav')); return; }
       if (t.closest('[data-room]')) roomSheet();
+      if (t.closest('[data-ok]')) { closeSheet(); return; }
       var bk = t.closest('[data-book]');
       if (bk) bookSheet(bk.getAttribute('data-book'));
     });
@@ -1829,7 +1835,9 @@ img{cursor:zoom-in}
   function bookSheet(id) {
     var S = SPOTS[id];
     if (!S) return;
-    openSheet(S.name, olB(S.booking) + (S.bookingNote ? '<p class="mapnote">' + esc(S.bookingNote) + '</p>' : ''));
+    openSheet(S.name,
+      olB(S.booking) + (S.bookingNote ? '<p class="mapnote">' + esc(S.bookingNote) + '</p>' : '') +
+      '<button type="button" class="dlg-ok" data-ok="1">我已知晓</button>', true);
   }
 
   function pageProject() {
