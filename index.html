@@ -792,6 +792,16 @@ img{cursor:zoom-in}
     st: 'https://j.map.baidu.com/5b/fvwJ'
   };
 
+  /* 腾讯地图 POI 详情页：腾讯地图 App/H5 对地点「分享」复制链接生成 */
+  var PLACE_QQ = {
+    guren: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=13921969817966395254&s=1&coord=112.415273%2C34.732416&centercoord=112.415273%2C34.732416&m=112.415273%2C34.732416&c=112.415273%2C34.732416&n=%E6%B4%9B%E9%98%B3%E5%8F%A4%E5%A2%93%E5%8D%9A%E7%89%A9%E9%A6%86&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E8%80%81%E5%9F%8E%E5%8C%BA%E6%9C%BA%E5%9C%BA%E8%B7%AF6%E5%8F%B7%28%E8%BF%91%E5%9B%BD%E9%99%85%E7%89%A1%E4%B8%B9%E5%9B%AD%29&i=13921969817966395254&p=0379-62265737&fromSource=share&channelId=0-13921969817966395254-poi-copylink_h5',
+    baima: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=13873070882633197930&s=1&coord=112.605489%2C34.72184&centercoord=112.605489%2C34.72184&m=112.605489%2C34.72184&c=112.605489%2C34.72184&n=%E6%B4%9B%E9%98%B3%E7%99%BD%E9%A9%AC%E5%AF%BA&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E7%80%8D%E6%B2%B3%E5%9B%9E%E6%97%8F%E5%8C%BA%E6%B4%9B%E7%99%BD%E8%B7%AF6%E5%8F%B7&i=13873070882633197930&p=0379-63789090&fromSource=share&channelId=0-13873070882633197930-poi-copylink_h5',
+    gucheng: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=8087663469293982297&s=1&coord=112.485302%2C34.680361&centercoord=112.485302%2C34.680361&m=112.485302%2C34.680361&c=112.485302%2C34.680361&n=%E6%B4%9B%E9%82%91%E5%8F%A4%E5%9F%8E&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E8%80%81%E5%9F%8E%E5%8C%BA%E4%B9%9D%E9%83%BD%E8%B7%AF%E6%9F%B3%E6%9E%97%E8%A1%97%E5%8F%A3&i=8087663469293982297&p=0379-60696969&fromSource=share&channelId=0-8087663469293982297-poi-copylink_h5',
+    yadu_north: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=11871776960047304463&s=1&coord=112.484632%2C34.684804&centercoord=112.484632%2C34.684804&m=112.484632%2C34.684804&c=112.484632%2C34.684804&n=%E6%B4%9B%E9%98%B3%E6%B4%9B%E9%82%91%E5%8F%A4%E5%9F%8E%E5%8C%97%E9%97%A8%E4%BA%9A%E6%9C%B5%E9%85%92%E5%BA%97&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E8%80%81%E5%9F%8E%E5%8C%BA%E4%B8%9C%E5%8C%97%E9%9A%85%E8%A1%97%E9%81%93%E6%B0%91%E4%B8%BB%E8%A1%97%E6%B4%9B%E9%98%B3%E5%B8%82%E8%80%81%E5%9F%8E%E5%8C%BA%E5%B8%82%E5%9C%BA%E7%9B%91%E7%9D%A3%E7%AE%A1%E7%90%86%E5%B1%80&i=11871776960047304463&p=0379-62229999&fromSource=share&channelId=0-11871776960047304463-poi-copylink_h5',
+    st: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=11476621995037212393&s=1&coord=112.458694%2C34.593991&centercoord=112.458694%2C34.593991&m=112.458694%2C34.593991&c=112.458694%2C34.593991&n=%E6%B4%9B%E9%98%B3%E9%BE%99%E9%97%A8%E7%AB%99&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E6%B4%9B%E9%BE%99%E5%8C%BA%E9%BE%99%E9%97%A8%E8%A1%97%E9%81%93%E9%80%9A%E8%A1%A2%E8%B7%AF19%E5%8F%B7&i=11476621995037212393&p=&fromSource=share&channelId=0-11476621995037212393-poi-copylink_h5',
+    longmen: 'https://map.wap.qq.com/online/h5-poi-detail-out/index.html?uid=11774686008442663321&s=1&coord=112.47497%2C34.566876&centercoord=112.47497%2C34.566876&m=112.47497%2C34.566876&c=112.47497%2C34.566876&n=%E9%BE%99%E9%97%A8%E7%9F%B3%E7%AA%9F%E8%A5%BF%E5%8C%97%E6%9C%8D%E5%8A%A1%E5%8C%BA&pt=0&a=%E6%B2%B3%E5%8D%97%E7%9C%81%E6%B4%9B%E9%98%B3%E5%B8%82%E6%B4%9B%E9%BE%99%E5%8C%BA%E9%BE%99%E9%97%A8%E4%B8%AD%E8%A1%9713%E5%8F%B7%E9%BE%99%E9%97%A8%E7%9F%B3%E7%AA%9F%E5%86%85%28%E5%8C%97%E4%BE%A7%29&i=11774686008442663321&p=&fromSource=share&channelId=0-11774686008442663321-poi-copylink_h5'
+  };
+
   /* 地点坐标（腾讯地图检索所得，GCJ-02）；导航与地图共用 */
   var PLACE_COORD = {
     guren: [34.732416, 112.415274],
@@ -826,16 +836,17 @@ img{cursor:zoom-in}
     var nm = encodeURIComponent(T.name);
     var amapOverride = PLACE_AMAP[id] || (P.obj && P.obj.amap);
     var baiduOverride = PLACE_BAIDU[id];
+    var qqOverride = PLACE_QQ[id];
     if (!c) {
       return { amap: amapOverride || ('https://uri.amap.com/search?keyword=' + nm + '&city=洛阳&src=lytrip'),
         baidu: baiduOverride || ('https://api.map.baidu.com/geocoder?address=' + nm + '&city=洛阳&output=html&src=lytrip'),
-        qq: 'https://apis.map.qq.com/uri/v1/search?keyword=' + nm + '&referer=lytrip' };
+        qq: qqOverride || ('https://apis.map.qq.com/uri/v1/search?keyword=' + nm + '&referer=lytrip') };
     }
     var lat = c[0], lng = c[1];
     return {
       amap: amapOverride || ('https://uri.amap.com/navigation?to=' + lng + ',' + lat + ',' + nm + '&mode=car&coordinate=gaode&callnative=1&src=lytrip'),
       baidu: baiduOverride || ('https://api.map.baidu.com/direction?destination=latlng:' + lat + ',' + lng + '|name:' + nm + '&mode=driving&region=洛阳&output=html&src=lytrip'),
-      qq: 'https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=' + nm + '&tocoord=' + lat + ',' + lng + '&policy=0&referer=lytrip'
+      qq: qqOverride || ('https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=' + nm + '&tocoord=' + lat + ',' + lng + '&policy=0&referer=lytrip')
     };
   }
 
